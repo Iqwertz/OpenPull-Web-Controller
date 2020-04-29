@@ -1,0 +1,30 @@
+@import 'libs/vars';
+@import 'libs/functions';
+@import 'libs/breakpoints';
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i');
+  
+// Breakpoints.  
+ 
+	@include breakpoints((
+		default:   (1681px,   null     ),
+		xlarge:    (1281px,   1680px   ),
+		large:     (981px,    1280px   ),
+		medium:    (737px,    980px    ),
+		small:     (481px,    736px    ),
+		xsmall:    (361px,    480px    ),
+		xxsmall:   (null,     360px    )
+	));
+
+// Base.
+
+	@import 'base/reset';
+
+// Component.
+
+	@import 'component/buttons';
+	@import 'component/chart';
+
+// Layout.
+
+	@import 'layout/mainpage';
+	@import 'layout/starttest';
