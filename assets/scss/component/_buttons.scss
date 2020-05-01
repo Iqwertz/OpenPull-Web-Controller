@@ -1,0 +1,89 @@
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	button,
+	.button {
+		background-color: _palette(accent3);
+		border-radius: _size(border-radius);
+		border: 0;
+		color: _palette(fg-bold) !important;
+		cursor: pointer;
+		display: inline-block;
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: _font(weight-bold);
+		height: _size(element-height);
+		line-height: _size(element-height);
+		overflow: hidden;
+		padding: 0 1rem;
+		position: relative;
+		text-align: center;
+		text-decoration: none;
+		white-space: nowrap;
+        color:  _svg(logo); 
+        transition: background-color 0.5s;
+        
+		&:hover {
+			background-color: lighten(_palette(accent2), 5);
+		}
+
+		&:active {
+			background-color: _palette(accent2);
+		}
+
+		&.primary {
+			background-color: _palette(accent1);
+			box-shadow: none;
+			color: _palette(fg-bold) !important;
+
+			&:hover {
+				background-color: _palette(accent1-hover);
+			}
+
+			&:active {
+				background-color: _palette(accent1);
+			}
+		}
+
+		&.small {
+			font-size: 0.8rem;
+			height: _size(element-height) * 0.75;
+			line-height: _size(element-height) * 0.75;
+			padding: 0 3.75rem 0 1.25rem;
+		}
+
+		&.large {
+			font-size: 1.20rem;
+			height: _size(element-height) * 1.20;
+			line-height: _size(element-height) * 1.20;
+			padding: 0 4.75rem 0 1.5rem;
+		}
+
+		&.wide {
+			min-width: 13rem;
+		}
+
+		&.fit {
+			width: 100%;
+		}
+        
+        &.round{
+            text-align: center center;
+            font-size: 2.7rem;
+			height: _size(element-height)*1.25;
+			width: _size(element-height)*1.25;
+            border-radius: _size(element-height);
+        }
+	}
+
+
+    input[type="number"]{
+        background-color: _palette(accent2);
+        border: 0;
+        border-radius: 10px;
+        height: _size(element-height) * 0.5;
+        width: _size(element-height) * 1.5;
+        font-size: 1.5rem;
+        padding: 6px;
+        text-align: center;
+    }

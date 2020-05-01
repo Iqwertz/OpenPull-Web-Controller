@@ -1,0 +1,59 @@
+.ControlsContainer{
+    box-sizing: border-box;
+    position: absolute;
+    top:0;
+    right: 0;
+    width: 100% - _size(chartcontainer-width);
+    height: 100%;
+    display: block;
+    padding: 40px 70px;
+
+    .add{
+        left: 50%;
+        transform: translate(-50%);
+        margin-top: 15%;
+    }
+
+    .subcontrols{
+        display: flex;
+    }
+
+    .PauseStop{
+        position: absolute;
+        left: 70px;
+        margin-top: 80px;
+        padding: 20px;
+
+        button{
+            display: block;
+            left: 0;
+            margin-top: 40px;
+        }
+        
+        #Stop{
+            background-color: #ff4242;
+        }        
+        #Pause{
+            background-color: #ffaf42;
+        }
+    }
+
+    .Move{
+        position: absolute;
+        right: 70px;
+        margin-top: 80px;
+        padding: 20px;
+        
+        button{
+            display: block;
+            left: 50%;
+        transform: translate(-50%);
+            margin-top: 20px;
+        }
+        
+        .Distance{
+            display: block;
+            margin-top: 20px;
+        }
+    }
+} 

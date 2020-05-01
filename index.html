@@ -4,12 +4,51 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="assets/css/main.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        <script src="assets/js/angular-chart.js"></script>
+        <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
     </head>
-    <body>
-        <div class="ChartContainer" id="ChartCon">
-            <canvas id="LiveChart" class="Chart"></canvas>
+    <body ng-app="app">
+        <div ng-controller="Controller">
+            <div class="ChartContainer" id="ChartCon" >
+                <canvas id="line" 
+                        width="{{ChartWidth}}"
+                        height="{{ChartHeight}}"
+                        class="chart chart-line"
+                        chart-data="data"
+                        chart-labels="labels" 
+                        chart-options="options"
+                        ></canvas>
+            </div>
+
+            <div class="ControlsContainer" ng-controller="ControlsController">
+                <button class="button fit add" >
+                    <i class="fas fa-plus"></i> New Test
+                </button>
+
+                <div class="subcontrols">
+                    <div class="PauseStop">
+                        <button class="button round" id="Stop">
+                            <i class="far fa-times-circle"></i>
+                        </button>
+                        <button class="button round" id="Pause">
+                            <i class="fas fa-stop"></i>
+                        </button>
+                    </div>
+                    <div class="Move">
+                        <button class="button round" id="Up">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <input type="number" class="Distance"/>
+                        <button class="button round" id="Down">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-         <script src="assets/js/chart.js"></script>
+        <script src="assets/js/chart.js"></script>
+        <script src="assets/js/controls.js"></script>
     </body>
 </html>

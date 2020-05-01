@@ -1,8 +1,9 @@
 // Size.
 	$size: (
+        element-height: 4rem,
 		border-radius:		7px,
 		border-width:		3px,
-        chartcontainer-width: 60%
+        chartcontainer-width: 65%,
 	);
 
 // Font.
@@ -10,27 +11,19 @@
 		family:				('Source Sans Pro', Arial, Helvetica, sans-serif),
 		family-fixed:		('Courier New', monospace),
 		weight:				300,
-		weight-bold:		700
+		weight-bold:		700,
 	);
 
 // Palette.
 	$palette: (
-		bg:					#24242a,   //#24242a.
-		bg-dark:			#1f1f24,
-		bg-alt:				#2e2e35,
-		fg:					transparentize(#ffffff,0.5),
-		fg-bold:			#ffffff,
-		fg-light:			transparentize(#ffffff,0.5),
-		border:				transparentize(#6e6e7a,0.5),
-		border-bg:			transparent,
+		bg:					#1D1D23,
+		bg-dark:			#131317,
 
-		accent1:			#00774d,  //#5EA2C5.
-		accent1-hover:		saturate(lighten(#154b5b, 3), 8),
-		accent1-alt:		desaturate(darken(#00774d, 5), 8),
-		accent1-dark:		saturate(darken(#00774d, 18), 3),
-		accent2:			#154b5b,  //#49A8C4.
-		accent3:			#2e2e35,
-		accent3-alt:		#3e3e47,
-        
-        chart-dark:         #a5ffa5
+		accent1:			#35FF83 , 
+		accent1-hover:		saturate(lighten(#549AC1, 3), 8),
+		accent1-alt:		desaturate(darken(#35FF83 , 5), 8),
+		accent1-dark:		saturate(darken(#35FF83 , 18), 3),
+		accent2:			#549AC1,
+        accent3:            #7549e0,
+        accent3-alt:        #482991
 	);

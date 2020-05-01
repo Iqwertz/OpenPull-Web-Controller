@@ -23,7 +23,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
   line-height: 1;
-  background-color: #24242a; }
+  background-color: #1D1D23; }
 
 ol, ul {
   list-style: none; }
@@ -55,11 +55,160 @@ input, select, textarea {
   -ms-appearance: none;
   appearance: none; }
 
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button,
+.button {
+  background-color: #7549e0;
+  border-radius: 7px;
+  border: 0;
+  color: !important;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  height: 4rem;
+  line-height: 4rem;
+  overflow: hidden;
+  padding: 0 1rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  color: _svg(logo);
+  transition: background-color 0.5s; }
+  input[type="submit"]:hover,
+  input[type="reset"]:hover,
+  input[type="button"]:hover,
+  button:hover,
+  .button:hover {
+    background-color: #67a5c8; }
+  input[type="submit"]:active,
+  input[type="reset"]:active,
+  input[type="button"]:active,
+  button:active,
+  .button:active {
+    background-color: #549AC1; }
+  input[type="submit"].primary,
+  input[type="reset"].primary,
+  input[type="button"].primary,
+  button.primary,
+  .button.primary {
+    background-color: #35FF83;
+    box-shadow: none;
+    color: !important; }
+    input[type="submit"].primary:hover,
+    input[type="reset"].primary:hover,
+    input[type="button"].primary:hover,
+    button.primary:hover,
+    .button.primary:hover {
+      background-color: #57a3ce; }
+    input[type="submit"].primary:active,
+    input[type="reset"].primary:active,
+    input[type="button"].primary:active,
+    button.primary:active,
+    .button.primary:active {
+      background-color: #35FF83; }
+  input[type="submit"].small,
+  input[type="reset"].small,
+  input[type="button"].small,
+  button.small,
+  .button.small {
+    font-size: 0.8rem;
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 3.75rem 0 1.25rem; }
+  input[type="submit"].large,
+  input[type="reset"].large,
+  input[type="button"].large,
+  button.large,
+  .button.large {
+    font-size: 1.20rem;
+    height: 4.8rem;
+    line-height: 4.8rem;
+    padding: 0 4.75rem 0 1.5rem; }
+  input[type="submit"].wide,
+  input[type="reset"].wide,
+  input[type="button"].wide,
+  button.wide,
+  .button.wide {
+    min-width: 13rem; }
+  input[type="submit"].fit,
+  input[type="reset"].fit,
+  input[type="button"].fit,
+  button.fit,
+  .button.fit {
+    width: 100%; }
+  input[type="submit"].round,
+  input[type="reset"].round,
+  input[type="button"].round,
+  button.round,
+  .button.round {
+    text-align: center center;
+    font-size: 2.7rem;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 4rem; }
+
+input[type="number"] {
+  background-color: #549AC1;
+  border: 0;
+  border-radius: 10px;
+  height: 2rem;
+  width: 6rem;
+  font-size: 1.5rem;
+  padding: 6px;
+  text-align: center; }
+
 .ChartContainer {
   box-sizing: border-box;
-  width: 60%;
+  width: 65%;
   height: 100%;
   border-right: 3px solid #00cc56;
-  padding: 50px; }
+  padding: 10% 15px 9% 5px; }
+
+.ControlsContainer {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 35%;
+  height: 100%;
+  display: block;
+  padding: 40px 70px; }
+  .ControlsContainer .add {
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 15%; }
+  .ControlsContainer .subcontrols {
+    display: flex; }
+  .ControlsContainer .PauseStop {
+    position: absolute;
+    left: 70px;
+    margin-top: 80px;
+    padding: 20px; }
+    .ControlsContainer .PauseStop button {
+      display: block;
+      left: 0;
+      margin-top: 40px; }
+    .ControlsContainer .PauseStop #Stop {
+      background-color: #ff4242; }
+    .ControlsContainer .PauseStop #Pause {
+      background-color: #ffaf42; }
+  .ControlsContainer .Move {
+    position: absolute;
+    right: 70px;
+    margin-top: 80px;
+    padding: 20px; }
+    .ControlsContainer .Move button {
+      display: block;
+      left: 50%;
+      transform: translate(-50%);
+      margin-top: 20px; }
+    .ControlsContainer .Move .Distance {
+      display: block;
+      margin-top: 20px; }
 
 /*# sourceMappingURL=main.css.map */
