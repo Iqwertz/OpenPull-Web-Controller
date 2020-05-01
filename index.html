@@ -9,13 +9,13 @@
         <script src="assets/js/angular-chart.js"></script>
         <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
     </head>
-    <body ng-app="app">
-        <div ng-controller="Controller">
+    <body >
+        <div>
             <div class="ChartContainer" id="ChartCon" >
                  <canvas id="LiveChart" class="Chart"></canvas>
             </div>
 
-            <div class="ControlsContainer" ng-controller="ControlsController">
+            <div class="ControlsContainer">
                 <button class="button fit add" >
                     <i class="fas fa-plus"></i> New Test
                 </button>
@@ -42,6 +42,7 @@
             </div>
         </div>
         <script src="assets/js/chart.js"></script>
+        <script src="assets/js/ble.js"></script>
         <script src="assets/js/controls.js"></script>
     </body>
 </html>

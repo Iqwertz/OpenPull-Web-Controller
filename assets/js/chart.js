@@ -23,8 +23,8 @@ var LiveChart = new Chart(ctx, {
     options: {
         responsive: true,
         tooltips: {
-            mode: 'index',
-            intersect: false,
+            mode: 'ipoint',
+          //  intersect: false,
         },
         hover: {
             mode: 'nearest', 
@@ -55,7 +55,7 @@ var LiveChart = new Chart(ctx, {
 });
 
 var x=0;
-setInterval(function(){test();}, 500);
+//setInterval(function(){test();}, 500);
 
 function addData(data, steps) {
     var DataSteps = steps || DefaultStepSize;
@@ -68,7 +68,6 @@ function addData(data, steps) {
 }
 
 function test(){
-    console.log("f");
     x+=getRandomArbitrary(-10,10);
     addData(x);
 }
