@@ -12,14 +12,7 @@
     <body ng-app="app">
         <div ng-controller="Controller">
             <div class="ChartContainer" id="ChartCon" >
-                <canvas id="line" 
-                        width="{{ChartWidth}}"
-                        height="{{ChartHeight}}"
-                        class="chart chart-line"
-                        chart-data="data"
-                        chart-labels="labels" 
-                        chart-options="options"
-                        ></canvas>
+                 <canvas id="LiveChart" class="Chart"></canvas>
             </div>
 
             <div class="ControlsContainer" ng-controller="ControlsController">
