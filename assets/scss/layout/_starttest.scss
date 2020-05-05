@@ -1,0 +1,118 @@
+.AddTest{
+    #Exit{
+        background-color: #ff7c7c;
+        position: absolute;
+        right:20px;
+        top: 20px;
+        padding: 0;
+    }
+
+    .TestForm{
+        font-family: _font(family);
+        &.Titel{
+            width: 90%;
+            position: static;
+            margin-top: 30px;
+            margin-left: 50%;
+            transform: translate(-50%);
+            color: #151515;
+        }
+
+        &.Parameter{
+            box-sizing: content-box;
+            text-align: center;
+            color: #e3e3e3;
+            font-size: 1.5em;
+            padding-top: 20px;
+        }
+    }
+}
+
+.ParameterList{
+    margin-top: 10px;
+    background-color: lighten(_palette(bg),10);
+    border-radius: _size(border-radius);
+    border: 2px solid _palette(accent1);
+
+    .ParaCon{
+        padding: 10px 10px 10px 5%;
+        display: flex;
+        position: relative;
+
+        .fa-times{
+            padding: 5px 5px 5px 15px;
+            color: #ff4b4b;
+            position: absolute;
+            right: 10px;
+        }
+
+        .fa-plus{
+            padding: 5px 15px;
+            color: #4bff75;
+        }
+
+        .ParameterItem{    
+            white-space: nowrap;
+
+            &.Name{
+                text-align: left;
+                vertical-align: center;
+                font-size: 1.5vw;
+                margin-top: 5px;
+                margin-right: 10px;
+                width: 500%;
+                overflow:hidden; 
+            }
+
+
+            &.Unit,
+            &.Value{
+                margin: 5px 10px;
+                input{
+                    font-size: 1.1vw;
+                    border-radius: _size(border-radius);;
+                    height: _size(element-height)*0.4;
+                    background-color: rgba(#e3e3e3, 0.95);
+                    width: 3vw;
+                } 
+            }
+
+            &.Unit{
+                margin-right: 1.4em;
+            }
+        }
+
+        &.Header{
+            border-bottom: 3px solid _palette(accent1);
+            
+            .PH{
+                nargin: 5px 0;
+            }
+
+            .Name{
+                width: 100%;
+            }
+
+            .Value{
+                margin-right: 1.1em;
+            }
+
+            .Unit{
+                margin-right: 1.7em;
+                width: 4vw;
+            }
+        }
+
+        &.AddP{
+            border: 2px solid _palette(accent1);
+            background-color: lighten(_palette(bg),30);
+            border-radius: _size(border-radius);;
+
+            input{
+                background-color: #e0e0e0;
+                font-size: 1.2vw;
+                border-radius: _size(border-radius);;
+            }
+        }
+    }
+}

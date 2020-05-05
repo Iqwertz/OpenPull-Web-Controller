@@ -9,14 +9,14 @@
         <script src="assets/js/angular-chart.js"></script>
         <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
     </head>
-    <body >
-        <div>
-            <div class="ChartContainer" id="ChartCon" >
-                 <canvas id="LiveChart" class="Chart"></canvas>
-            </div>
+    <body ng-app="app">
+        <div class="ChartContainer" id="ChartCon" >
+            <canvas id="LiveChart" class="Chart"></canvas>
+        </div>
 
-            <div class="ControlsContainer">
-                <button class="button fit add" >
+        <div class="ControlsContainer" ng-controller="Controls">
+            <div id="ControllInterface" ng-show="ControllerInterface" >
+                <button class="button fit add" ng-click="ControllerInterface=false" >
                     <i class="fas fa-plus"></i> New Test
                 </button>
 
@@ -30,13 +30,70 @@
                         </button>
                     </div>
                     <div class="Move">
-                        <button class="button round" id="Up">
+                        <button ng-click="MoveUp()" class="button round" id="Up">
                             <i class="fas fa-arrow-up"></i>
                         </button>
-                        <input type="number" class="Distance"/>
-                        <button class="button round" id="Down">
+                        <input type="number" ng-model="MoveDistance" class="Distance"/>
+                        <button ng-click="MoveDown()" class="button round" id="Down">
                             <i class="fas fa-arrow-down"></i>
                         </button>
+                    </div>
+                </div>
+            </div>
+            <div id="AddTest" class="AddTest" ng-hide="ControllerInterface" >
+                <button class="button smallround" id="Exit" ng-click="ControllerInterface=true">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div ng-controller="AddTest">
+                    <h1>New Test</h1>
+                    <input placeholder="Name" type="text" class="TestForm Titel" ng-model="Name" />
+                    <div class="TestForm Parameter">
+                        Parameter:
+                        <div class="ParameterList">
+                            <ul>
+                                <li>
+                                    <div class="ParaCon Header">
+                                        <div class="PH Name">
+                                            Name <!--<i class="fas fa-arrow-down"></i>  --> 
+                                        </div>
+                                        <div class="PH Value">
+                                            Value
+                                        </div>
+                                        <div class="PH Unit">
+                                            Unit
+                                        </div>
+                                    </div>
+                                </li>
+                                <li ng-repeat="parameter in parameter" >
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">{{parameter["Name"]}}</div>
+                                        <div class="ParameterItem Value"><input type="number" ng-model="parameter['Value']" /></div>
+                                        <div class="ParameterItem Unit"><input ng-model="parameter['Unit']" placeholder="%" type="text" /></div>
+                                        <i ng-click="RemoveParameter($index)" class="fas fa-times"></i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="ParaCon AddP">
+                                        <div class="ParameterItem AddParameter"><input type="text" placeholder="New Parameter" ng-model="NewParameterField" ng-keyup="$event.keyCode == 13 ? AddParameter() : null" /></div>
+                                        <i ng-click="AddParameter()" class="fas fa-plus"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <br/>
+                        Test Mode:
+                        <br/>
+                        <select ng-model="SelectedMode" ng-options="x for x in TestModes">
+                            <option value="" disabled selected>Select TestMode</option>
+                        </select>
+                        <br />
+                        Notes (optional):
+                        <br />
+                        <textarea ng-model="Notes"></textarea>
+                        <br />
+                <button class="button fit add" ng-click="StartTest()" >
+                    Start Test<i class="fas fa-angle-right"></i>
+                </button>
                     </div>
                 </div>
             </div>
@@ -44,5 +101,6 @@
         <script src="assets/js/chart.js"></script>
         <script src="assets/js/ble.js"></script>
         <script src="assets/js/controls.js"></script>
+        <script src="assets/js/addtest.js"></script>
     </body>
 </html>

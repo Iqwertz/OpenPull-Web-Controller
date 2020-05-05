@@ -22,6 +22,7 @@ footer, header, hgroup, menu, nav, section {
   display: block; }
 
 body {
+  overflow: hidden;
   line-height: 1;
   background-color: #1D1D23; }
 
@@ -111,6 +112,26 @@ button,
     button.primary:active,
     .button.primary:active {
       background-color: #35FF83; }
+  input[type="submit"].round,
+  input[type="reset"].round,
+  input[type="button"].round,
+  button.round,
+  .button.round {
+    text-align: center center;
+    font-size: 2.7rem;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 4rem; }
+  input[type="submit"].smallround,
+  input[type="reset"].smallround,
+  input[type="button"].smallround,
+  button.smallround,
+  .button.smallround {
+    text-align: center center;
+    font-size: 2rem;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 4rem; }
   input[type="submit"].small,
   input[type="reset"].small,
   input[type="button"].small,
@@ -141,26 +162,49 @@ button,
   button.fit,
   .button.fit {
     width: 100%; }
-  input[type="submit"].round,
-  input[type="reset"].round,
-  input[type="button"].round,
-  button.round,
-  .button.round {
-    text-align: center center;
-    font-size: 2.7rem;
-    height: 5rem;
-    width: 5rem;
-    border-radius: 4rem; }
 
-input[type="number"] {
+input[type=text],
+input[type=number] {
   background-color: #549AC1;
   border: 0;
-  border-radius: 10px;
+  border-radius: 7px;
   height: 2rem;
-  width: 6rem;
   font-size: 1.5rem;
   padding: 6px;
   text-align: center; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; }
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #484848;
+  opacity: 1;
+  /* Firefox */ }
+
+select {
+  margin: 15px;
+  background-color: #549AC1;
+  border: 0;
+  border-radius: 7px;
+  height: 2.8rem;
+  font-size: 1rem;
+  padding: 6px;
+  width: 150px; }
+
+textarea {
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 7px;
+  width: 100%;
+  resize: vertical;
+  color: #d1d1d1;
+  font-size: 1.2rem;
+  background-color: #34343f; }
 
 .ChartContainer {
   box-sizing: border-box;
@@ -177,7 +221,9 @@ input[type="number"] {
   width: 35%;
   height: 100%;
   display: block;
-  padding: 40px 70px; }
+  padding: 40px 70px;
+  overflow-y: scroll;
+  overflow-x: hidden; }
   .ControlsContainer .add {
     left: 50%;
     transform: translate(-50%);
@@ -210,5 +256,90 @@ input[type="number"] {
     .ControlsContainer .Move .Distance {
       display: block;
       margin-top: 20px; }
+
+h1 {
+  color: #e2e2e2;
+  text-align: center;
+  font-size: 2.2em; }
+
+.AddTest #Exit {
+  background-color: #ff7c7c;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 0; }
+
+.AddTest .TestForm {
+  font-family: "Source Sans Pro", Arial, Helvetica, sans-serif; }
+  .AddTest .TestForm.Titel {
+    width: 90%;
+    position: static;
+    margin-top: 30px;
+    margin-left: 50%;
+    transform: translate(-50%);
+    color: #151515; }
+  .AddTest .TestForm.Parameter {
+    box-sizing: content-box;
+    text-align: center;
+    color: #e3e3e3;
+    font-size: 1.5em;
+    padding-top: 20px; }
+
+.ParameterList {
+  margin-top: 10px;
+  background-color: #34343f;
+  border-radius: 7px;
+  border: 2px solid #35FF83; }
+  .ParameterList .ParaCon {
+    padding: 10px 10px 10px 5%;
+    display: flex;
+    position: relative; }
+    .ParameterList .ParaCon .fa-times {
+      padding: 5px 5px 5px 15px;
+      color: #ff4b4b;
+      position: absolute;
+      right: 10px; }
+    .ParameterList .ParaCon .fa-plus {
+      padding: 5px 15px;
+      color: #4bff75; }
+    .ParameterList .ParaCon .ParameterItem {
+      white-space: nowrap; }
+      .ParameterList .ParaCon .ParameterItem.Name {
+        text-align: left;
+        vertical-align: center;
+        font-size: 1.5vw;
+        margin-top: 5px;
+        margin-right: 10px;
+        width: 500%;
+        overflow: hidden; }
+      .ParameterList .ParaCon .ParameterItem.Unit, .ParameterList .ParaCon .ParameterItem.Value {
+        margin: 5px 10px; }
+        .ParameterList .ParaCon .ParameterItem.Unit input, .ParameterList .ParaCon .ParameterItem.Value input {
+          font-size: 1.1vw;
+          border-radius: 7px;
+          height: 1.6rem;
+          background-color: rgba(227, 227, 227, 0.95);
+          width: 3vw; }
+      .ParameterList .ParaCon .ParameterItem.Unit {
+        margin-right: 1.4em; }
+    .ParameterList .ParaCon.Header {
+      border-bottom: 3px solid #35FF83; }
+      .ParameterList .ParaCon.Header .PH {
+        nargin: 5px 0; }
+      .ParameterList .ParaCon.Header .Name {
+        width: 100%; }
+      .ParameterList .ParaCon.Header .Value {
+        margin-right: 1.1em; }
+      .ParameterList .ParaCon.Header .Unit {
+        margin-right: 1.7em;
+        width: 4vw; }
+    .ParameterList .ParaCon.AddP {
+      border: 2px solid #35FF83;
+      background-color: #626277;
+      border-radius: 7px; }
+      .ParameterList .ParaCon.AddP input {
+        background-color: #e0e0e0;
+        font-size: 1.2vw;
+        border-radius: 7px; }
 
 /*# sourceMappingURL=main.css.map */

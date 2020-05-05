@@ -1,4 +1,5 @@
 var DefaultStepSize=1;
+var DisplayedValues=200;
 
 var ctx = document.getElementById('LiveChart');
 
@@ -61,9 +62,12 @@ function addData(data, steps) {
     var DataSteps = steps || DefaultStepSize;
     var LD=LiveChart.data.labels;
     LD.push((Number(LD[LD.length-1])+DataSteps).toString());
-    LiveChart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-    });
+    var DatasetData=LiveChart.data.datasets[0].data;
+    DatasetData.push(data);
+    if(DatasetData.length>DisplayedValues){
+        DatasetData.shift();
+        LD.shift();
+    }
     LiveChart.update();
 }
 

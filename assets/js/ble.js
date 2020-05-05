@@ -41,8 +41,7 @@ function onStartButtonClick() {
         return charackteristicsCache.startNotifications().then(_ => {
 
             console.log('> Notifications started');
-            charackteristicsCache.addEventListener('characteristicvaluechanged',
-                                                   handleNotifications);
+            charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
             send("C;");
         });
     })
@@ -110,8 +109,10 @@ function handleNotifications(event) {
             if (data) {
                 if(data.charAt(0)=="V"){
                     addData(Number(data.substr(1)));
+                }else if (data.charAt(0)=="C"){
+                    console.log(data.substr(1));
                 }
-                console.log(data.substr(1)); 
+                //console.log(data); 
             }
         }
         else {

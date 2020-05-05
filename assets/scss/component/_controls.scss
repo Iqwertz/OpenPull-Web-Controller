@@ -7,6 +7,8 @@
     height: 100%;
     display: block;
     padding: 40px 70px;
+        overflow-y: scroll;
+    overflow-x: hidden;
 
     .add{
         left: 50%;
