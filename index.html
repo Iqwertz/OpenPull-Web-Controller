@@ -10,11 +10,16 @@
         <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
     </head>
     <body ng-app="app">
+
+        <button class="button round" onclick="onStartButtonClick();" id="Ble">
+            <i class="fab fa-bluetooth-b"></i>
+        </button>
+
         <div class="ChartContainer" id="ChartCon" >
             <canvas id="LiveChart" class="Chart"></canvas>
         </div>
 
-        <div class="ControlsContainer" ng-controller="Controls">
+        <div class="ControlsContainer" ng-controller="Controls as MainController">
             <div id="ControllInterface" ng-show="ControllerInterface" >
                 <button class="button fit add" ng-click="ControllerInterface=false" >
                     <i class="fas fa-plus"></i> New Test
@@ -22,11 +27,8 @@
 
                 <div class="subcontrols">
                     <div class="PauseStop">
-                        <button class="button round" id="Stop">
+                        <button class="button round" ng-click="Stop()" id="Stop">
                             <i class="far fa-times-circle"></i>
-                        </button>
-                        <button class="button round" id="Pause">
-                            <i class="fas fa-stop"></i>
                         </button>
                     </div>
                     <div class="Move">
@@ -91,9 +93,9 @@
                         <br />
                         <textarea ng-model="Notes"></textarea>
                         <br />
-                <button class="button fit add" ng-click="StartTest()" >
-                    Start Test<i class="fas fa-angle-right"></i>
-                </button>
+                        <button class="button fit add" ng-click="StartTest()" >
+                            Start Test<i class="fas fa-angle-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>

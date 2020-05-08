@@ -10,4 +10,8 @@ app.controller('Controls', function($scope) {
     $scope.MoveDown = function(){
         send("G0 "+$scope.MoveDistance*-1);
     }
+    
+    $scope.Stop = function(){
+        send("S ");
+    }
 });

@@ -42,7 +42,6 @@ function onStartButtonClick() {
 
             console.log('> Notifications started');
             charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
-            send("C;");
         });
     })
         .catch(error => {
@@ -107,12 +106,16 @@ function handleNotifications(event) {
             let data = readBuffer.trim();
             readBuffer = '';
             if (data) {
-                if(data.charAt(0)=="V"){
-                    addData(Number(data.substr(1)));
-                }else if (data.charAt(0)=="C"){
-                    console.log(data.substr(1));
+                console.log(data); 
+                if(!AddingTest){
+                    if(data.charAt(0)=="V"){
+                        addData(Number(data.substr(1)));
+                    }else if (data.charAt(0)=="C"){
+                        console.log(data.substr(1));
+                    }
+                }else{
+                    BleSendTestData(data);
                 }
-                //console.log(data); 
             }
         }
         else {
@@ -123,7 +126,9 @@ function handleNotifications(event) {
 
 function send(data) {    //function that sends data and splits it up if to big
     data = String(data);
-
+    
+    console.log("Sending: "+ data)
+    
     if (!data || !charackteristicsCache) {
         return;
     }

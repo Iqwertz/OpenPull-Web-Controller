@@ -84,7 +84,7 @@
 
         &.Header{
             border-bottom: 3px solid _palette(accent1);
-            
+
             .PH{
                 nargin: 5px 0;
             }
@@ -112,6 +112,37 @@
                 background-color: #e0e0e0;
                 font-size: 1.2vw;
                 border-radius: _size(border-radius);;
+            }
+        }
+    }
+}
+
+@include breakpoint('<=small') {
+    .ParameterList{
+        .ParaCon{
+            .ParameterItem{  
+                &.Name{
+                    font-size: 3vh;
+                }                
+                &.Unit,
+                &.Value{
+                    margin: 5px 10px;
+                    input{
+                        font-size: 2vh;
+                        background-color: rgba(#e3e3e3, 0.95);
+                        width: 50px;
+                    } 
+                }
+                &.Unit{
+                    margin-right: 30px;
+                }
+            }
+
+            &.AddP{
+                input{
+                    width: 200px;
+                    font-size: 2vh;
+                }
             }
         }
     }
