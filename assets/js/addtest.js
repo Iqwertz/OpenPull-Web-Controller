@@ -2,7 +2,7 @@ var AddingTest = false;
 var BleAddTestSendArray = [];
 var LastAddedData = "";
 var BleSendDataIndex = 0;
-var BleSendDelay = 2000;
+//var BleSendDelay = 0;
 var BleSendTestMode;
 
 app.controller('AddTest', function($scope) {
@@ -36,12 +36,21 @@ app.controller('AddTest', function($scope) {
             } else if ($scope.SelectedMode==$scope.TestModes[1]){
                 Mode="M13";
             }
-                   $scope.$parent.ControllerInterface=true;
+            $scope.Sending=true;
             BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes);
         }else{
             alert("Please Select Test Mode and set Name")
         }
     }
+    
+    $scope.ExitStartTest =function(){
+        BleSendDataIndex = 0
+        $scope.Sending=false;
+        $scope.$parent.ControllerInterface=true;
+    }
+    
+    $scope.SendingStatus=0;
+    $scope.Sending=false;
 });  
 
 
@@ -63,7 +72,6 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
     BleSendTestMode = TestMode;
     AddingTest=true;
     BleSendTestData();
-    
 }
 
 function BleSendTestData(respons){
@@ -72,14 +80,18 @@ function BleSendTestData(respons){
             send(BleAddTestSendArray[BleSendDataIndex]);
         }else{
             if(respons==BleAddTestSendArray[BleSendDataIndex]){
-                send("OK");
+             //   send("OK");
                 BleSendDataIndex++;
                 if(BleSendDataIndex==BleAddTestSendArray.length){
-                    setTimeout(function () {send("END "+BleSendTestMode)},BleSendDelay);
+                    send("OKEND "+BleSendTestMode);
+                    //setTimeout(function () {send("END "+BleSendTestMode)},BleSendDelay);
                     AddingTest=false;
+                    var scope = angular.element(document.getElementById("NewTest")).scope();
+                    scope.ExitStartTest();
                 }else{
                     console.log("Delay");
-                    setTimeout(function () {send(BleAddTestSendArray[BleSendDataIndex])},BleSendDelay);
+                    send("OK"+BleAddTestSendArray[BleSendDataIndex]);
+                    //setTimeout(function () {send(BleAddTestSendArray[BleSendDataIndex])},BleSendDelay);
                 }
             }else{
                 send("FALSE");
@@ -88,6 +100,7 @@ function BleSendTestData(respons){
     }else{
         send("NEW");
     }
+    SetSendStat((BleSendDataIndex*100)/ BleAddTestSendArray.length);
 }
 
 function GetDateTime() {
@@ -115,4 +128,11 @@ function GetDateTime() {
     }   
     var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;   
     return dateTime;
+}
+
+function SetSendStat(Percent){
+    var scope = angular.element(document.getElementById("NewTest")).scope();
+    scope.$apply(function(){
+        scope.SendingStatus = round(Percent);
+    })
 }

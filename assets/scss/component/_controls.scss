@@ -90,9 +90,11 @@
         
         .PauseStop{
             margin: 20px 0;
+            font-size: 1.8em;
             
             #stop{
                 top: _size(element-height)*1.2;
+                font-size: 0.8em;
             }
         }
     }

@@ -90,7 +90,7 @@ input[type=number]{
     border: 0;
     border-radius: _size(border-radius);
     height: _size(element-height) * 0.5;
-   // width: _size(element-height) * 1.5;
+    // width: _size(element-height) * 1.5;
     font-size: 1.5rem;
     padding: 6px;
     text-align: center;
@@ -115,7 +115,7 @@ select{
     border: 0;
     border-radius: _size(border-radius);
     height: _size(element-height) * 0.7;
-   // width: _size(element-height) * 1.5;
+    // width: _size(element-height) * 1.5;
     font-size: 1rem;
     padding: 6px;
     width: 150px;
@@ -130,4 +130,19 @@ textarea{
     color: #d1d1d1;
     font-size: 1.2rem;
     background-color: lighten(_palette(bg), 10);
+}
+
+@include breakpoint('<=small') {
+    .button{
+        &.round{
+            font-size: 1.8em;
+            height: _size(element-height)*0.8;
+            width: _size(element-height)*0.8;
+            
+            i{
+            font-size: 0.8em;
+        }
+        }
+    }   
+    
 }

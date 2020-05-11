@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////Bluetooth Web Api////////////////////////////////////////////
 ////////Using Code from the Google Chrome Web Ble example////////////
+
 var charackteristicsCache = null;
 var serviceUuid = "0xFFE0";
 var characteristicUuid = "0xFFE1";
-let deviceCache = null;
-let readBuffer = '';
-
+var deviceCache = null;
+var readBuffer = '';
 var currentServiceUuid;
 var currentCharacteristicUuid;
 
@@ -42,6 +42,8 @@ function onStartButtonClick() {
 
             console.log('> Notifications started');
             charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
+            SetBleVar(true);
+            send("SdStat");
         });
     })
         .catch(error => {
@@ -50,26 +52,21 @@ function onStartButtonClick() {
 }
 
 function handleDisconnection(event) {   //function that tries to reconnect if connection is suddenly lost
+    SetBleVar(false);
     let device = event.target;
     console.log('"' + device.name +
                 '" bluetooth device disconnected, trying to reconnect...');
     connectDeviceAndCacheCharacteristic(device).
-    then(characteristic => startNotifications(characteristic)).
-    catch(error => console.log(error));
-}
+    then(characteristic => {
+        charackteristicsCache = characteristic;
+        return charackteristicsCache.startNotifications().then(_ => {
 
-function onStopButtonClick() {    //function not working because only notification is stopped
-    if (charackteristicsCache) {
-        charackteristicsCache.stopNotifications()
-            .then(_ => {
-            console.log('> Notifications stopped');
-            charackteristicsCache.removeEventListener('characteristicvaluechanged',
-                                                      handleNotifications);
-        })
-            .catch(error => {
-            console.log('Argh! ' + error);
+            console.log('> Notifications started');
+            charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
+            SetBleVar(true);
         });
-    }
+    }).
+    catch(error => console.log(error));
 }
 
 function connectDeviceAndCacheCharacteristic(device) {
@@ -112,6 +109,8 @@ function handleNotifications(event) {
                         addData(Number(data.substr(1)));
                     }else if (data.charAt(0)=="C"){
                         console.log(data.substr(1));
+                    }else if (data=="SDfalse"){
+                        alert("Attention! No Sd Card! Restart the Arduino if Sd card is inserted");
                     }
                 }else{
                     BleSendTestData(data);
@@ -126,9 +125,9 @@ function handleNotifications(event) {
 
 function send(data) {    //function that sends data and splits it up if to big
     data = String(data);
-    
+
     console.log("Sending: "+ data)
-    
+
     if (!data || !charackteristicsCache) {
         return;
     }
@@ -151,4 +150,11 @@ function send(data) {    //function that sends data and splits it up if to big
 
 function writeToCharacteristic(characteristic, data) {
     characteristic.writeValue(new TextEncoder().encode(data));
+} 
+
+function SetBleVar(state){
+    var scope = angular.element(document.getElementById("ControlsId")).scope();
+    scope.$apply(function(){
+        scope.BleStatus = state;
+    })
 }

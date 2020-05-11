@@ -48,7 +48,7 @@ var LiveChart = new Chart(ctx, {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: 'Force'
+                    labelString: 'Force (N)'
                 }
             }]
         }

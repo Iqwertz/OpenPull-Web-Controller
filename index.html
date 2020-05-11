@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="assets/css/main.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-        <script src="assets/js/angular-chart.js"></script>
         <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
     </head>
     <body ng-app="app">
@@ -19,7 +18,7 @@
             <canvas id="LiveChart" class="Chart"></canvas>
         </div>
 
-        <div class="ControlsContainer" ng-controller="Controls as MainController">
+        <div id="ControlsId" class="ControlsContainer" ng-controller="Controls as MainController">
             <div id="ControllInterface" ng-show="ControllerInterface" >
                 <button class="button fit add" ng-click="ControllerInterface=false" >
                     <i class="fas fa-plus"></i> New Test
@@ -32,11 +31,11 @@
                         </button>
                     </div>
                     <div class="Move">
-                        <button ng-click="MoveUp()" class="button round" id="Up">
+                        <button ng-disabled="!BleStatus" ng-click="MoveUp()" class="button round" id="Up">
                             <i class="fas fa-arrow-up"></i>
                         </button>
                         <input type="number" ng-model="MoveDistance" class="Distance"/>
-                        <button ng-click="MoveDown()" class="button round" id="Down">
+                        <button ng-disabled="!BleStatus" ng-click="MoveDown()" class="button round" id="Down">
                             <i class="fas fa-arrow-down"></i>
                         </button>
                     </div>
@@ -46,7 +45,7 @@
                 <button class="button smallround" id="Exit" ng-click="ControllerInterface=true">
                     <i class="fas fa-times"></i>
                 </button>
-                <div ng-controller="AddTest">
+                <div id="NewTest" ng-controller="AddTest">
                     <h1>New Test</h1>
                     <input placeholder="Name" type="text" class="TestForm Titel" ng-model="Name" />
                     <div class="TestForm Parameter">
@@ -93,16 +92,21 @@
                         <br />
                         <textarea ng-model="Notes"></textarea>
                         <br />
-                        <button class="button fit add" ng-click="StartTest()" >
+                        <button ng-disabled="!BleStatus" class="button fit add" ng-click="StartTest()" >
                             Start Test<i class="fas fa-angle-right"></i>
                         </button>
+                    </div>
+                    <div class="LoadingScreen" ng-show="Sending">
+                        Sending Data...
+                        <br/>
+                        {{SendingStatus}}%
                     </div>
                 </div>
             </div>
         </div>
         <script src="assets/js/chart.js"></script>
-        <script src="assets/js/ble.js"></script>
         <script src="assets/js/controls.js"></script>
         <script src="assets/js/addtest.js"></script>
+        <script src="assets/js/ble.js"></script>
     </body>
 </html>
