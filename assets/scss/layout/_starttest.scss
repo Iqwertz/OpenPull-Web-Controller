@@ -80,6 +80,22 @@
             &.Unit{
                 margin-right: 1.4em;
             }
+            
+            &.Dropdown{
+                margin: 5px -40px;
+                
+                
+                select{
+                    margin: 0;
+                    font-size: 1.1vw;
+                    border-radius: _size(border-radius);;
+                    height: _size(element-height)*0.4;
+                    background-color: rgba(#e3e3e3, 0.95);
+                    width: 9.8vw;
+                    border: 0px;
+                    padding: 0 5px;;
+                } 
+            }
         }
 
         &.Header{

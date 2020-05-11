@@ -65,11 +65,35 @@
                                         </div>
                                     </div>
                                 </li>
+                                <li>
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">Material</div>
+                                        <div class="ParameterItem Dropdown">
+                                            <select ng-model="MaterialType" ng-options="x for x in MaterialTypeOptions">
+                                                <option value="" disabled selected>{{MaterialType}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="ParameterItem Unit">
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">Infill Type</div>
+                                        <div class="ParameterItem Dropdown">
+                                            <select ng-model="InfillType" ng-options="x for x in InfillTypeOptions">
+                                                <option value="" disabled selected>{{InfillType}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="ParameterItem Unit">
+                                        </div>
+                                    </div>
+                                </li>
                                 <li ng-repeat="parameter in parameter" >
                                     <div class="ParaCon">
                                         <div class="ParameterItem Name">{{parameter["Name"]}}</div>
                                         <div class="ParameterItem Value"><input type="number" ng-model="parameter['Value']" /></div>
-                                        <div class="ParameterItem Unit"><input ng-model="parameter['Unit']" placeholder="%" type="text" /></div>
+                                        <div class="ParameterItem Unit"><input ng-model="parameter['Unit']"  type="text" /></div>
                                         <i ng-click="RemoveParameter($index)" class="fas fa-times"></i>
                                     </div>
                                 </li>

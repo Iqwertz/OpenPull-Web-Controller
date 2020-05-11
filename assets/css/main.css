@@ -364,6 +364,17 @@ h1 {
           width: 3vw; }
       .ParameterList .ParaCon .ParameterItem.Unit {
         margin-right: 1.4em; }
+      .ParameterList .ParaCon .ParameterItem.Dropdown {
+        margin: 5px -40px; }
+        .ParameterList .ParaCon .ParameterItem.Dropdown select {
+          margin: 0;
+          font-size: 1.1vw;
+          border-radius: 7px;
+          height: 1.6rem;
+          background-color: rgba(227, 227, 227, 0.95);
+          width: 9.8vw;
+          border: 0px;
+          padding: 0 5px; }
     .ParameterList .ParaCon.Header {
       border-bottom: 3px solid #35FF83; }
       .ParameterList .ParaCon.Header .PH {

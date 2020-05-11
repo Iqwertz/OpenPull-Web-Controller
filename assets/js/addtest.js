@@ -8,10 +8,27 @@ var BleSendTestMode;
 app.controller('AddTest', function($scope) {
     $scope.Name="";
 
-    $scope.parameter = [{Name: "Infill", Value: 15, Unit: "%"},{Name: "Layer Height", Value: 0.5, Unit: "mm"},{Name: "Nozzle Temperatur", Value: 200, Unit: "°"}];
+    $scope.InfillTypeOptions = ["Rectilinear", "Grid", "Triangles", "Stars", "Cubic", "Line", "Concentric", "Honeycomb", "3d Honeycomb", "Gyroid", "Hilbert Curve", "Archimedean Chords", "Octagram Spiral"];
+    $scope.InfillType = "Gyroid";
+
+    $scope.MaterialTypeOptions = ["PLA", "PETG", "PET", "ABS", "TPU", "PC", "NYLON", "ASA"];
+    $scope.MaterialType = "PLA";
+
+    $scope.parameter = [
+        {Name: "Infill", Value: 15, Unit: "%"},
+        {Name: "Layer Height", Value: 0.3, Unit: "mm"},
+        {Name: "First Layer Height", Value: 0.3, Unit: "mm"},
+        {Name: "Nozzle Size", Value: 0.5, Unit: "mm"},
+        {Name: "Bed Temperatur", Value: 70, Unit: "°"},
+        {Name: "Nozzle Temperatur", Value: 200, Unit: "°"},
+        {Name: "Vertical Shells", Value: 3, Unit: ""},
+        {Name: "Top Layers", Value: 3, Unit: ""},
+        {Name: "Bottom Layers", Value: 3, Unit: ""}
+    ];
 
     $scope.TestModes = ["Slow Test (M10)", "Fast Test (M13)"];
     $scope.SelectedMode;
+
 
     $scope.Notes="";
 
@@ -28,7 +45,7 @@ app.controller('AddTest', function($scope) {
     }
 
     $scope.StartTest = function(){
-        
+
         if($scope.Name!="" && $scope.SelectedMode!=null){
             var Mode;
             if($scope.SelectedMode==$scope.TestModes[0]){
@@ -37,18 +54,21 @@ app.controller('AddTest', function($scope) {
                 Mode="M13";
             }
             $scope.Sending=true;
+            $scope.parameter.unshift({Name: "Infill Type", Value:'"'+$scope.InfillType+'"', Unit: ""});
+            $scope.parameter.unshift({Name: "Material", Value:'"'+$scope.MaterialTypeType+'"', Unit: ""});
+
             BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes);
         }else{
             alert("Please Select Test Mode and set Name")
         }
     }
-    
+
     $scope.ExitStartTest =function(){
         BleSendDataIndex = 0
         $scope.Sending=false;
         $scope.$parent.ControllerInterface=true;
     }
-    
+
     $scope.SendingStatus=0;
     $scope.Sending=false;
 });  
@@ -67,8 +87,8 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
     BleAddTestSendArray.push('"TestMode": "' + TestMode + '",');
     BleAddTestSendArray.push('"Notes": "' + Notes + '"');
     BleAddTestSendArray.push('},');
-   // BleAddTestSendArray.push('}');
-    
+    // BleAddTestSendArray.push('}');
+
     BleSendTestMode = TestMode;
     AddingTest=true;
     BleSendTestData();
@@ -80,7 +100,7 @@ function BleSendTestData(respons){
             send(BleAddTestSendArray[BleSendDataIndex]);
         }else{
             if(respons==BleAddTestSendArray[BleSendDataIndex]){
-             //   send("OK");
+                //   send("OK");
                 BleSendDataIndex++;
                 if(BleSendDataIndex==BleAddTestSendArray.length){
                     send("OKEND "+BleSendTestMode);
