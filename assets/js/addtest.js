@@ -54,8 +54,8 @@ app.controller('AddTest', function($scope) {
                 Mode="M13";
             }
             $scope.Sending=true;
-            $scope.parameter.unshift({Name: "Infill Type", Value:'"'+$scope.InfillType+'"', Unit: ""});
-            $scope.parameter.unshift({Name: "Material", Value:'"'+$scope.MaterialTypeType+'"', Unit: ""});
+            $scope.parameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
+            $scope.parameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
 
             BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes);
         }else{
@@ -153,6 +153,6 @@ function GetDateTime() {
 function SetSendStat(Percent){
     var scope = angular.element(document.getElementById("NewTest")).scope();
     scope.$apply(function(){
-        scope.SendingStatus = round(Percent);
+        scope.SendingStatus = Math.round(Percent);
     })
 }
