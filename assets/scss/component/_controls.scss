@@ -7,6 +7,8 @@
     height: 100%;
     display: block;
     padding: 40px 70px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 
     .add{
         left: 50%;
@@ -27,15 +29,14 @@
         button{
             display: block;
             left: 0;
-            margin-top: 40px;
+
         }
-        
+
         #Stop{
             background-color: #ff4242;
+            top: _size(element-height)*1.5;
         }        
-        #Pause{
-            background-color: #ffaf42;
-        }
+
     }
 
     .Move{
@@ -43,17 +44,58 @@
         right: 70px;
         margin-top: 80px;
         padding: 20px;
-        
+
         button{
             display: block;
             left: 50%;
-        transform: translate(-50%);
+            transform: translate(-50%);
             margin-top: 20px;
         }
-        
+
         .Distance{
             display: block;
             margin-top: 20px;
+            width: _size(element-height)*1.25;
         }
     }
 } 
+
+
+#Ble{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+@include breakpoint('<=small') {
+    .ControlsContainer{
+        width: 100%;
+        height: 60%;
+        position: relative;
+        bottom: 0;
+        display: block;
+        padding: 30px 20px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        
+        
+        .Move{
+            padding-top: 0;
+            margin: 20px 0;
+        }
+
+        .add{
+            margin-top: 0px;
+        }
+        
+        .PauseStop{
+            margin: 20px 0;
+            font-size: 1.8em;
+            
+            #stop{
+                top: _size(element-height)*1.2;
+                font-size: 0.8em;
+            }
+        }
+    }
+}

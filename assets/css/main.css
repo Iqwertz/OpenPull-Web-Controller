@@ -22,6 +22,7 @@ footer, header, hgroup, menu, nav, section {
   display: block; }
 
 body {
+  overflow: hidden;
   line-height: 1;
   background-color: #1D1D23; }
 
@@ -60,7 +61,7 @@ input[type="reset"],
 input[type="button"],
 button,
 .button {
-  background-color: #7549e0;
+  background-color: #56ff83;
   border-radius: 7px;
   border: 0;
   color: !important;
@@ -84,13 +85,13 @@ button,
   input[type="button"]:hover,
   button:hover,
   .button:hover {
-    background-color: #67a5c8; }
+    background-color: #f3f3f3; }
   input[type="submit"]:active,
   input[type="reset"]:active,
   input[type="button"]:active,
   button:active,
   .button:active {
-    background-color: #549AC1; }
+    background-color: #e6e6e6; }
   input[type="submit"].primary,
   input[type="reset"].primary,
   input[type="button"].primary,
@@ -111,6 +112,26 @@ button,
     button.primary:active,
     .button.primary:active {
       background-color: #35FF83; }
+  input[type="submit"].round,
+  input[type="reset"].round,
+  input[type="button"].round,
+  button.round,
+  .button.round {
+    text-align: center center;
+    font-size: 2.7rem;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 4rem; }
+  input[type="submit"].smallround,
+  input[type="reset"].smallround,
+  input[type="button"].smallround,
+  button.smallround,
+  .button.smallround {
+    text-align: center center;
+    font-size: 2rem;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 4rem; }
   input[type="submit"].small,
   input[type="reset"].small,
   input[type="button"].small,
@@ -141,26 +162,57 @@ button,
   button.fit,
   .button.fit {
     width: 100%; }
-  input[type="submit"].round,
-  input[type="reset"].round,
-  input[type="button"].round,
-  button.round,
-  .button.round {
-    text-align: center center;
-    font-size: 2.7rem;
-    height: 5rem;
-    width: 5rem;
-    border-radius: 4rem; }
 
-input[type="number"] {
-  background-color: #549AC1;
+input[type=text],
+input[type=number] {
+  background-color: #e6e6e6;
   border: 0;
-  border-radius: 10px;
+  border-radius: 7px;
   height: 2rem;
-  width: 6rem;
   font-size: 1.5rem;
   padding: 6px;
   text-align: center; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; }
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #484848;
+  opacity: 1;
+  /* Firefox */ }
+
+select {
+  margin: 15px;
+  background-color: #e6e6e6;
+  border: 0;
+  border-radius: 7px;
+  height: 2.8rem;
+  font-size: 1rem;
+  padding: 6px;
+  width: 150px; }
+
+textarea {
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 7px;
+  width: 100%;
+  resize: vertical;
+  color: #d1d1d1;
+  font-size: 1.2rem;
+  background-color: #34343f; }
+
+@media screen and (max-width: 736px) {
+  .button.round {
+    font-size: 1.8em;
+    height: 3.2rem;
+    width: 3.2rem; }
+    .button.round i {
+      font-size: 0.8em; } }
 
 .ChartContainer {
   box-sizing: border-box;
@@ -168,6 +220,14 @@ input[type="number"] {
   height: 100%;
   border-right: 3px solid #00cc56;
   padding: 10% 15px 9% 5px; }
+
+@media screen and (max-width: 736px) {
+  .ChartContainer {
+    box-sizing: border-box;
+    width: 100%;
+    height: 45%;
+    border-right: 0px solid;
+    padding: 15% 0 0 0; } }
 
 .ControlsContainer {
   box-sizing: border-box;
@@ -177,7 +237,9 @@ input[type="number"] {
   width: 35%;
   height: 100%;
   display: block;
-  padding: 40px 70px; }
+  padding: 40px 70px;
+  overflow-y: scroll;
+  overflow-x: hidden; }
   .ControlsContainer .add {
     left: 50%;
     transform: translate(-50%);
@@ -191,12 +253,10 @@ input[type="number"] {
     padding: 20px; }
     .ControlsContainer .PauseStop button {
       display: block;
-      left: 0;
-      margin-top: 40px; }
+      left: 0; }
     .ControlsContainer .PauseStop #Stop {
-      background-color: #ff4242; }
-    .ControlsContainer .PauseStop #Pause {
-      background-color: #ffaf42; }
+      background-color: #ff4242;
+      top: 6rem; }
   .ControlsContainer .Move {
     position: absolute;
     right: 70px;
@@ -209,6 +269,157 @@ input[type="number"] {
       margin-top: 20px; }
     .ControlsContainer .Move .Distance {
       display: block;
-      margin-top: 20px; }
+      margin-top: 20px;
+      width: 5rem; }
+
+#Ble {
+  position: absolute;
+  top: 20px;
+  left: 20px; }
+
+@media screen and (max-width: 736px) {
+  .ControlsContainer {
+    width: 100%;
+    height: 60%;
+    position: relative;
+    bottom: 0;
+    display: block;
+    padding: 30px 20px;
+    overflow-y: scroll;
+    overflow-x: hidden; }
+    .ControlsContainer .Move {
+      padding-top: 0;
+      margin: 20px 0; }
+    .ControlsContainer .add {
+      margin-top: 0px; }
+    .ControlsContainer .PauseStop {
+      margin: 20px 0;
+      font-size: 1.8em; }
+      .ControlsContainer .PauseStop #stop {
+        top: 4.8rem;
+        font-size: 0.8em; } }
+
+h1 {
+  color: #e2e2e2;
+  text-align: center;
+  font-size: 2.2em; }
+
+.AddTest #Exit {
+  background-color: #ff7c7c;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 0; }
+
+.AddTest .TestForm {
+  font-family: "Source Sans Pro", Arial, Helvetica, sans-serif; }
+  .AddTest .TestForm.Titel {
+    width: 90%;
+    position: static;
+    margin-top: 30px;
+    margin-left: 50%;
+    transform: translate(-50%);
+    color: #151515; }
+  .AddTest .TestForm.Parameter {
+    box-sizing: content-box;
+    text-align: center;
+    color: #e3e3e3;
+    font-size: 1.5em;
+    padding-top: 20px; }
+
+.ParameterList {
+  margin-top: 10px;
+  background-color: #34343f;
+  border-radius: 7px;
+  border: 2px solid #35FF83; }
+  .ParameterList .ParaCon {
+    padding: 10px 10px 10px 5%;
+    display: flex;
+    position: relative; }
+    .ParameterList .ParaCon .fa-times {
+      padding: 5px 5px 5px 15px;
+      color: #ff4b4b;
+      position: absolute;
+      right: 10px; }
+    .ParameterList .ParaCon .fa-plus {
+      padding: 5px 15px;
+      color: #4bff75; }
+    .ParameterList .ParaCon .ParameterItem {
+      white-space: nowrap; }
+      .ParameterList .ParaCon .ParameterItem.Name {
+        text-align: left;
+        vertical-align: center;
+        font-size: 1.5vw;
+        margin-top: 5px;
+        margin-right: 10px;
+        width: 500%;
+        overflow: hidden; }
+      .ParameterList .ParaCon .ParameterItem.Unit, .ParameterList .ParaCon .ParameterItem.Value {
+        margin: 5px 10px; }
+        .ParameterList .ParaCon .ParameterItem.Unit input, .ParameterList .ParaCon .ParameterItem.Value input {
+          font-size: 1.1vw;
+          border-radius: 7px;
+          height: 1.6rem;
+          background-color: rgba(227, 227, 227, 0.95);
+          width: 3vw; }
+      .ParameterList .ParaCon .ParameterItem.Unit {
+        margin-right: 1.4em; }
+      .ParameterList .ParaCon .ParameterItem.Dropdown {
+        margin: 5px -40px; }
+        .ParameterList .ParaCon .ParameterItem.Dropdown select {
+          margin: 0;
+          font-size: 1.1vw;
+          border-radius: 7px;
+          height: 1.6rem;
+          background-color: rgba(227, 227, 227, 0.95);
+          width: 9.8vw;
+          border: 0px;
+          padding: 0 5px; }
+    .ParameterList .ParaCon.Header {
+      border-bottom: 3px solid #35FF83; }
+      .ParameterList .ParaCon.Header .PH {
+        nargin: 5px 0; }
+      .ParameterList .ParaCon.Header .Name {
+        width: 100%; }
+      .ParameterList .ParaCon.Header .Value {
+        margin-right: 1.1em; }
+      .ParameterList .ParaCon.Header .Unit {
+        margin-right: 1.7em;
+        width: 4vw; }
+    .ParameterList .ParaCon.AddP {
+      border: 2px solid #35FF83;
+      background-color: #626277;
+      border-radius: 7px; }
+      .ParameterList .ParaCon.AddP input {
+        background-color: #e0e0e0;
+        font-size: 1.2vw;
+        border-radius: 7px; }
+
+.LoadingScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  font-size: 1.5em;
+  color: #fff;
+  padding-top: 50%; }
+
+@media screen and (max-width: 736px) {
+  .ParameterList .ParaCon .ParameterItem.Name {
+    font-size: 3vh; }
+  .ParameterList .ParaCon .ParameterItem.Unit, .ParameterList .ParaCon .ParameterItem.Value {
+    margin: 5px 10px; }
+    .ParameterList .ParaCon .ParameterItem.Unit input, .ParameterList .ParaCon .ParameterItem.Value input {
+      font-size: 2vh;
+      background-color: rgba(227, 227, 227, 0.95);
+      width: 50px; }
+  .ParameterList .ParaCon .ParameterItem.Unit {
+    margin-right: 30px; }
+  .ParameterList .ParaCon.AddP input {
+    width: 200px;
+    font-size: 2vh; } }
 
 /*# sourceMappingURL=main.css.map */

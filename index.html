@@ -6,49 +6,131 @@
         <link rel="stylesheet" href="assets/css/main.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-        <script src="assets/js/angular-chart.js"></script>
         <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
     </head>
     <body ng-app="app">
-        <div ng-controller="Controller">
-            <div class="ChartContainer" id="ChartCon" >
-                <canvas id="line" 
-                        width="{{ChartWidth}}"
-                        height="{{ChartHeight}}"
-                        class="chart chart-line"
-                        chart-data="data"
-                        chart-labels="labels" 
-                        chart-options="options"
-                        ></canvas>
-            </div>
 
-            <div class="ControlsContainer" ng-controller="ControlsController">
-                <button class="button fit add" >
+        <button class="button round" onclick="onStartButtonClick();" id="Ble">
+            <i class="fab fa-bluetooth-b"></i>
+        </button>
+
+        <div class="ChartContainer" id="ChartCon" >
+            <canvas id="LiveChart" class="Chart"></canvas>
+        </div>
+
+        <div id="ControlsId" class="ControlsContainer" ng-controller="Controls as MainController">
+            <div id="ControllInterface" ng-show="ControllerInterface" >
+                <button class="button fit add" ng-click="ControllerInterface=false" >
                     <i class="fas fa-plus"></i> New Test
                 </button>
 
                 <div class="subcontrols">
                     <div class="PauseStop">
-                        <button class="button round" id="Stop">
+                        <button class="button round" ng-click="Stop()" id="Stop">
                             <i class="far fa-times-circle"></i>
-                        </button>
-                        <button class="button round" id="Pause">
-                            <i class="fas fa-stop"></i>
                         </button>
                     </div>
                     <div class="Move">
-                        <button class="button round" id="Up">
+                        <button ng-disabled="!BleStatus" ng-click="MoveUp()" class="button round" id="Up">
                             <i class="fas fa-arrow-up"></i>
                         </button>
-                        <input type="number" class="Distance"/>
-                        <button class="button round" id="Down">
+                        <input type="number" ng-model="MoveDistance" class="Distance"/>
+                        <button ng-disabled="!BleStatus" ng-click="MoveDown()" class="button round" id="Down">
                             <i class="fas fa-arrow-down"></i>
                         </button>
+                    </div>
+                </div>
+            </div>
+            <div id="AddTest" class="AddTest" ng-hide="ControllerInterface" >
+                <button class="button smallround" id="Exit" ng-click="ControllerInterface=true">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div id="NewTest" ng-controller="AddTest">
+                    <h1>New Test</h1>
+                    <input placeholder="Name" type="text" class="TestForm Titel" ng-model="Name" />
+                    <div class="TestForm Parameter">
+                        Parameter:
+                        <div class="ParameterList">
+                            <ul>
+                                <li>
+                                    <div class="ParaCon Header">
+                                        <div class="PH Name">
+                                            Name <!--<i class="fas fa-arrow-down"></i>  --> 
+                                        </div>
+                                        <div class="PH Value">
+                                            Value
+                                        </div>
+                                        <div class="PH Unit">
+                                            Unit
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">Material</div>
+                                        <div class="ParameterItem Dropdown">
+                                            <select ng-model="MaterialType" ng-options="x for x in MaterialTypeOptions">
+                                                <option value="" disabled selected>{{MaterialType}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="ParameterItem Unit">
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">Infill Type</div>
+                                        <div class="ParameterItem Dropdown">
+                                            <select ng-model="InfillType" ng-options="x for x in InfillTypeOptions">
+                                                <option value="" disabled selected>{{InfillType}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="ParameterItem Unit">
+                                        </div>
+                                    </div>
+                                </li>
+                                <li ng-repeat="parameter in parameter" >
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">{{parameter["Name"]}}</div>
+                                        <div class="ParameterItem Value"><input type="number" ng-model="parameter['Value']" /></div>
+                                        <div class="ParameterItem Unit"><input ng-model="parameter['Unit']"  type="text" /></div>
+                                        <i ng-click="RemoveParameter($index)" class="fas fa-times"></i>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="ParaCon AddP">
+                                        <div class="ParameterItem AddParameter"><input type="text" placeholder="New Parameter" ng-model="NewParameterField" ng-keyup="$event.keyCode == 13 ? AddParameter() : null" /></div>
+                                        <i ng-click="AddParameter()" class="fas fa-plus"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <br/>
+                        Test Mode:
+                        <br/>
+                        <select ng-model="SelectedMode" ng-options="x for x in TestModes">
+                            <option value="" disabled selected>Select TestMode</option>
+                        </select>
+                        <br />
+                        Notes (optional):
+                        <br />
+                        <textarea ng-model="Notes"></textarea>
+                        <br />
+                        <button ng-disabled="!BleStatus" class="button fit add" ng-click="StartTest()" >
+                            Start Test<i class="fas fa-angle-right"></i>
+                        </button>
+                    </div>
+                    <div class="LoadingScreen" ng-show="Sending">
+                        Sending Data...
+                        <br/>
+                        {{SendingStatus}}%
                     </div>
                 </div>
             </div>
         </div>
         <script src="assets/js/chart.js"></script>
         <script src="assets/js/controls.js"></script>
+        <script src="assets/js/addtest.js"></script>
+        <script src="assets/js/ble.js"></script>
     </body>
 </html>
