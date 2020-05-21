@@ -81,7 +81,7 @@ button,
 
     &.fit {
         width: 100%;
-        
+
     }
 }
 
@@ -139,11 +139,12 @@ textarea{
             font-size: 1.8em;
             height: _size(element-height)*0.8;
             width: _size(element-height)*0.8;
-            
+            padding: 0px;
+
             i{
-            font-size: 0.8em;
-        }
+                font-size: 1.1em;
+            }
         }
     }   
-    
+
 }

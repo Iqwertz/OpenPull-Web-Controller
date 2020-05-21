@@ -71,12 +71,11 @@
     .ControlsContainer{
         width: 100%;
         height: 60%;
-        position: relative;
-        bottom: 0;
+        position: absolute;
+        top: 40%;
         display: block;
         padding: 30px 20px;
-        overflow-y: scroll;
-        overflow-x: hidden;
+        overflow-y: auto;
         
         
         .Move{
