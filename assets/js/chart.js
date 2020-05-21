@@ -14,7 +14,7 @@ var LiveChart = new Chart(ctx, {
         datasets: [{
             backgroundColor: '#297446',
             borderColor: '#297947',
-            borderWidth: 1,
+            borderWidth: 3,
             lineTension: 0,
             lineTension: 0,
             pointRadius: 0,
