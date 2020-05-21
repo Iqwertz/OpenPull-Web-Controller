@@ -61,7 +61,7 @@ input[type="reset"],
 input[type="button"],
 button,
 .button {
-  background-color: #7549e0;
+  background-color: #56ff83;
   border-radius: 7px;
   border: 0;
   color: !important;
@@ -85,13 +85,13 @@ button,
   input[type="button"]:hover,
   button:hover,
   .button:hover {
-    background-color: #67a5c8; }
+    background-color: #f3f3f3; }
   input[type="submit"]:active,
   input[type="reset"]:active,
   input[type="button"]:active,
   button:active,
   .button:active {
-    background-color: #549AC1; }
+    background-color: #e6e6e6; }
   input[type="submit"].primary,
   input[type="reset"].primary,
   input[type="button"].primary,
@@ -165,7 +165,7 @@ button,
 
 input[type=text],
 input[type=number] {
-  background-color: #549AC1;
+  background-color: #e6e6e6;
   border: 0;
   border-radius: 7px;
   height: 2rem;
@@ -188,7 +188,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 select {
   margin: 15px;
-  background-color: #549AC1;
+  background-color: #e6e6e6;
   border: 0;
   border-radius: 7px;
   height: 2.8rem;
@@ -217,7 +217,7 @@ textarea {
 .ChartContainer {
   box-sizing: border-box;
   width: 65%;
-  height: 100%;
+  height: 100vh;
   border-right: 3px solid #00cc56;
   padding: 10% 15px 9% 5px; }
 
@@ -225,7 +225,7 @@ textarea {
   .ChartContainer {
     box-sizing: border-box;
     width: 100%;
-    height: 45%;
+    height: 45vh;
     border-right: 0px solid;
     padding: 15% 0 0 0; } }
 

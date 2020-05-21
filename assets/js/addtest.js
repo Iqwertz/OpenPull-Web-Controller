@@ -1,5 +1,7 @@
-var AddingTest = false;
-var BleAddTestSendArray = [];
+///////////////////////////////////////This Handles everything when the "New Test" Button is clicked ///////////////////
+
+var AddingTest = false;   //Determin if test is currently added
+var BleAddTestSendArray = [];   
 var LastAddedData = "";
 var BleSendDataIndex = 0;
 //var BleSendDelay = 0;
@@ -54,8 +56,8 @@ app.controller('AddTest', function($scope) {
                 Mode="M13";
             }
             $scope.Sending=true;
-            $scope.parameter.unshift({Name: "Infill Type", Value:'"'+$scope.InfillType+'"', Unit: ""});
-            $scope.parameter.unshift({Name: "Material", Value:'"'+$scope.MaterialTypeType+'"', Unit: ""});
+            $scope.parameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
+            $scope.parameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
 
             BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes);
         }else{
@@ -71,7 +73,7 @@ app.controller('AddTest', function($scope) {
 
     $scope.SendingStatus=0;
     $scope.Sending=false;
-});  
+});
 
 
 function BleStartNewTest(Name, Parameter, TestMode, Notes){
@@ -80,8 +82,12 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
     BleAddTestSendArray.push('"Name": "' + Name + '",');
     BleAddTestSendArray.push('"Date": "' + GetDateTime() + '",');
     BleAddTestSendArray.push('"Parameter": {');
-    for(var x of Parameter){
-        BleAddTestSendArray.push('"' + x.Name + '" : "' + x.Value + " " + x.Unit + '",');
+    for(var x=0; x<Parameter.length; x++){
+        if(x!=Parameter.length-1){
+            BleAddTestSendArray.push('"' + Parameter[x].Name + '" : "' + Parameter[x].Value + " " + Parameter[x].Unit + '",');
+        }else{
+            BleAddTestSendArray.push('"' + Parameter[x].Name + '" : "' + Parameter[x].Value + " " + Parameter[x].Unit + '"'); 
+        }
     }
     BleAddTestSendArray.push('},');
     BleAddTestSendArray.push('"TestMode": "' + TestMode + '",');
@@ -153,6 +159,6 @@ function GetDateTime() {
 function SetSendStat(Percent){
     var scope = angular.element(document.getElementById("NewTest")).scope();
     scope.$apply(function(){
-        scope.SendingStatus = round(Percent);
+        scope.SendingStatus = Math.round(Percent);
     })
 }

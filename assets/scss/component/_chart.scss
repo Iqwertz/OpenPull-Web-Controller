@@ -1,7 +1,7 @@
 .ChartContainer {
     box-sizing: border-box;
     width: _size(chartcontainer-width);
-    height: 100%;
+    height: 100vh;
     border-right: 3px solid #00cc56;
     padding: 10% 15px 9% 5px;
 }   
@@ -10,7 +10,7 @@
     .ChartContainer {
         box-sizing: border-box;
         width: 100%;
-        height: 45%;
+        height: 45vh;
         border-right: 0px solid;
         padding: 15% 0 0 0;
     }   
