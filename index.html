@@ -90,6 +90,18 @@
                                         </div>
                                     </div>
                                 </li>
+                                <li>
+                                    <div class="ParaCon">
+                                        <div class="ParameterItem Name">Orientation</div>
+                                        <div class="ParameterItem Dropdown">
+                                            <select ng-model="Orientation" ng-options="x for x in OrientationOptions">
+                                                <option value="" disabled selected>{{Orientation}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="ParameterItem Unit">
+                                        </div>
+                                    </div>
+                                </li>
                                 <li ng-repeat="parameter in parameter" >
                                     <div class="ParaCon">
                                         <div class="ParameterItem Name">{{parameter["Name"]}}</div>

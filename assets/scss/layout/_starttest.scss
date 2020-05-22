@@ -61,7 +61,7 @@
                 margin-top: 5px;
                 margin-right: 10px;
                 width: 500%;
-               overflow:hidden; 
+                overflow:hidden; 
             }
 
 
@@ -80,11 +80,11 @@
             &.Unit{
                 margin-right: 1.4em;
             }
-            
+
             &.Dropdown{
                 margin: 5px -40px;
-                
-                
+
+
                 select{
                     margin: 0;
                     font-size: 1.1vw;
@@ -165,6 +165,15 @@
                 &.Unit{
                     margin-right: 30px;
                 }
+
+                &.Dropdown{
+                    select{
+                        padding: 3px 10px;
+                        font-size: 2vh;
+                        height: _size(element-height)*0.4;
+                        width: 180px;
+                    } 
+                }
             }
 
             &.AddP{
@@ -173,7 +182,9 @@
                     font-size: 2vh;
                 }
             }
+
+
         }
     }
-    
+
 }

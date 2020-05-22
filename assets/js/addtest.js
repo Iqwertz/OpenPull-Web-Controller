@@ -15,6 +15,9 @@ app.controller('AddTest', function($scope) {
 
     $scope.MaterialTypeOptions = ["PLA", "PETG", "PET", "ABS", "TPU", "PC", "NYLON", "ASA"];
     $scope.MaterialType = "PLA";
+    
+    $scope.OrientationOptions = ["Standing", "Lying"];
+    $scope.Orientation = "Lying";
 
     $scope.parameter = [
         {Name: "Infill", Value: 15, Unit: "%"},
@@ -58,6 +61,7 @@ app.controller('AddTest', function($scope) {
             $scope.Sending=true;
             $scope.parameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
             $scope.parameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
+            $scope.parameter.unshift({Name: "Orientation", Value: $scope.Orientation, Unit: ""});
 
             BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes);
         }else{

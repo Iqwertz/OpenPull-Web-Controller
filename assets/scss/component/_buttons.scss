@@ -50,7 +50,13 @@ button,
         font-size: 2.7rem;
         height: _size(element-height)*1.25;
         width: _size(element-height)*1.25;
-        border-radius: _size(element-height);
+        border-radius: 50%;
+        i{
+            position: absolute;
+            top: 50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
     }
 
     &.smallround{
@@ -58,7 +64,15 @@ button,
         font-size: 2rem;
         height: _size(element-height)*0.75;
         width: _size(element-height)*0.75;
-        border-radius: _size(element-height);
+        border-radius: 100%;
+        padding: 0 0;
+        
+        i{
+            position: absolute;
+            top: 50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
     }
 
     &.small {
@@ -137,8 +151,8 @@ textarea{
     .button{
         &.round{
             font-size: 1.8em;
-            height: _size(element-height)*0.8;
-            width: _size(element-height)*0.8;
+            height: _size(element-height)*1.2;
+            width: _size(element-height)*1.2;
             padding: 0px;
 
             i{
@@ -146,5 +160,4 @@ textarea{
             }
         }
     }   
-
 }
