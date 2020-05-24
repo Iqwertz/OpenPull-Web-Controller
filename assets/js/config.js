@@ -1,3 +1,4 @@
+///Configuration of the default test Data
 var Config = {
     StandardTestParameter: {
         InfillType:{
@@ -31,5 +32,6 @@ var Config = {
             {Name: "Bottom Layers", Value: 3, Unit: ""}
         ]
 
-    }
+    },
+    DefaultMoveDistance: 10
 }

@@ -10,7 +10,7 @@ var readBuffer = '';
 var currentServiceUuid;
 var currentCharacteristicUuid;
 
-function onStartButtonClick() {
+function onStartButtonClick() {  //Start Ble 
     if (serviceUuid.startsWith('0x')) {
         currentServiceUuid = parseInt(serviceUuid);
     }
@@ -42,8 +42,8 @@ function onStartButtonClick() {
 
             console.log('> Notifications started');
             charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
-            SetBleVar(true);
-            send("SdStat");
+            SetBleVar(true); //Set the Ble var to activate the ble buttons
+            send("SdStat"); //Send Sd stat to chek if sd cara is inserted
         });
     })
         .catch(error => {
@@ -51,8 +51,8 @@ function onStartButtonClick() {
     });
 }
 
-function handleDisconnection(event) {   //function that tries to reconnect if connection is suddenly lost
-    SetBleVar(false);
+function handleDisconnection(event) {   //function that trys to reconnect if connection is suddenly lost
+    SetBleVar(false);  //Disable Ble Buttons because device maschine disconnected
     let device = event.target;
     console.log('"' + device.name +
                 '" bluetooth device disconnected, trying to reconnect...');
@@ -63,7 +63,7 @@ function handleDisconnection(event) {   //function that tries to reconnect if co
 
             console.log('> Notifications started');
             charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
-            SetBleVar(true);
+            SetBleVar(true);  //Set the Ble var to activate the ble buttons
         });
     }).
     catch(error => console.log(error));
@@ -99,21 +99,21 @@ function handleNotifications(event) {
     let value = event.target.value;
     let text = new TextDecoder().decode(event.target.value);
     for (let c of text) {
-        if (c === '\n') {
+        if (c === '\n') {  //read text until ther is a line break
             let data = readBuffer.trim();
             readBuffer = '';
             if (data) {
-                console.log(data); 
-                if(!AddingTest){
-                    if(data.charAt(0)=="V"){
-                        addData(Number(data.substr(1)));
-                    }else if (data.charAt(0)=="C"){
-                        console.log(data.substr(1));
-                    }else if (data=="SDfalse"){
+                console.log(data); //log data
+                if(!AddingTest){  //When there is currently no test added then the data is a new command
+                    if(data.charAt(0)=="V"){  //New Value
+                        addData(Number(data.substr(1)));  //Get Value and set it to the chart
+                    }else if (data.charAt(0)=="C"){   //Log data
+                        console.log(data.substr(1));   //Get the Value and log it
+                    }else if (data=="SDfalse"){  // Akert that no sd is in the maschine
                         alert("Attention! No Sd Card! Restart the Arduino if Sd card is inserted");
                     }
                 }else{
-                    BleSendTestData(data);
+                    BleSendTestData(data); //When there is currently data added send the data to the "BleSendTestData()" function
                 }
             }
         }
