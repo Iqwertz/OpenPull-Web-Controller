@@ -47,6 +47,9 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <div id="NewTest" ng-controller="AddTest">
+                    <button class="button smallround" id="Reset" ng-click="SetDefault()">
+                        <i class="fas fa-redo"></i>
+                    </button>
                     <h1>New Test</h1>
                     <input placeholder="Name" type="text" class="TestForm Titel" ng-model="Name" />
                     <div class="TestForm Parameter">
@@ -141,6 +144,7 @@
                 </div>
             </div>
         </div>
+        <script src="assets/js/config.js"></script>
         <script src="assets/js/chart.js"></script>
         <script src="assets/js/controls.js"></script>
         <script src="assets/js/addtest.js"></script>

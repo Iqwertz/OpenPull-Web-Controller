@@ -10,28 +10,18 @@ var BleSendTestMode;
 app.controller('AddTest', function($scope) {
     $scope.Name="";
 
-    $scope.InfillTypeOptions = ["Rectilinear", "Grid", "Triangles", "Stars", "Cubic", "Line", "Concentric", "Honeycomb", "3d Honeycomb", "Gyroid", "Hilbert Curve", "Archimedean Chords", "Octagram Spiral"];
-    $scope.InfillType = "Gyroid";
+    $scope.InfillTypeOptions = Config.StandardTestParameter.InfillType.Options;
+    $scope.InfillType = Config.StandardTestParameter.InfillType.Default;
 
-    $scope.MaterialTypeOptions = ["PLA", "PETG", "PET", "ABS", "TPU", "PC", "NYLON", "ASA"];
-    $scope.MaterialType = "PLA";
-    
-    $scope.OrientationOptions = ["Standing", "Lying"];
-    $scope.Orientation = "Lying";
+    $scope.MaterialTypeOptions = Config.StandardTestParameter.MaterialType.Options;
+    $scope.MaterialType = Config.StandardTestParameter.MaterialType.Default;
 
-    $scope.parameter = [
-        {Name: "Infill", Value: 15, Unit: "%"},
-        {Name: "Layer Height", Value: 0.3, Unit: "mm"},
-        {Name: "First Layer Height", Value: 0.3, Unit: "mm"},
-        {Name: "Nozzle Size", Value: 0.5, Unit: "mm"},
-        {Name: "Bed Temperatur", Value: 70, Unit: "°"},
-        {Name: "Nozzle Temperatur", Value: 200, Unit: "°"},
-        {Name: "Vertical Shells", Value: 3, Unit: ""},
-        {Name: "Top Layers", Value: 3, Unit: ""},
-        {Name: "Bottom Layers", Value: 3, Unit: ""}
-    ];
+    $scope.OrientationOptions = Config.StandardTestParameter.Orientation.Options;
+    $scope.Orientation = Config.StandardTestParameter.Orientation.Default;
 
-    $scope.TestModes = ["Slow Test (M10)", "Fast Test (M13)"];
+    $scope.parameter = Config.StandardTestParameter.Parameter;
+
+    $scope.TestModes = Config.StandardTestParameter.TestModes.Options;
     $scope.SelectedMode;
 
 
@@ -73,6 +63,29 @@ app.controller('AddTest', function($scope) {
         BleSendDataIndex = 0
         $scope.Sending=false;
         $scope.$parent.ControllerInterface=true;
+    }
+
+    $scope.SetDefault = function(){
+        $scope.Name="";
+
+        $scope.InfillTypeOptions = Config.StandardTestParameter.InfillType.Options;
+        $scope.InfillType = Config.StandardTestParameter.InfillType.Default;
+
+        $scope.MaterialTypeOptions = Config.StandardTestParameter.MaterialType.Options;
+        $scope.MaterialType = Config.StandardTestParameter.MaterialType.Default;
+
+        $scope.OrientationOptions = Config.StandardTestParameter.Orientation.Options;
+        $scope.Orientation = Config.StandardTestParameter.Orientation.Default;
+
+        $scope.parameter = Config.StandardTestParameter.Parameter;
+
+        $scope.TestModes = Config.StandardTestParameter.TestModes.Options;
+        $scope.SelectedMode = "";
+
+
+        $scope.Notes="";
+
+        $scope.NewParameterField="";
     }
 
     $scope.SendingStatus=0;

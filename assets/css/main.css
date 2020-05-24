@@ -316,7 +316,11 @@ textarea {
       font-size: 1.8em; }
       .ControlsContainer .PauseStop #stop {
         top: 4.8rem;
-        font-size: 0.8em; } }
+        font-size: 0.8em; }
+  #Ble {
+    position: absolute;
+    top: 5px;
+    left: 5px; } }
 
 h1 {
   color: #e2e2e2;
@@ -327,6 +331,13 @@ h1 {
   background-color: #ff7c7c;
   position: absolute;
   right: 20px;
+  top: 20px;
+  padding: 0; }
+
+.AddTest #Reset {
+  background-color: #ffc37c;
+  position: absolute;
+  left: 20px;
   top: 20px;
   padding: 0; }
 
