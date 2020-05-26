@@ -113,7 +113,13 @@ function handleNotifications(event) {
                         console.log(data.substr(1));
                         alert(data.substr(1));
                     }else if (data=="SDfalse"){  // Alert that no sd is in the maschine
-                        alert("Attention! No Sd Card! Restart the Arduino if Sd card is inserted");
+                        alert("Attention! No Sd Card!");
+                    }else if (data=="FinTest"){  // Alert that no sd is in the maschine
+                        alert("Test Finished");
+                        var scope = angular.element(document.getElementById("ControlsId")).scope();
+                        scope.$apply(function(){
+                            scope.MoveEnable = true;
+                        })
                     }
                 }else{
                     BleSendTestData(data); //When there is currently data added send the data to the "BleSendTestData()" function
@@ -159,5 +165,6 @@ function SetBleVar(state){
     var scope = angular.element(document.getElementById("ControlsId")).scope();
     scope.$apply(function(){
         scope.BleStatus = state;
+        scope.MoveEnable = state;
     })
 }

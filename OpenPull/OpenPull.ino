@@ -24,6 +24,8 @@ float measuringIntervall = .5;       //Measuring interval when IDLE
 float measuringIntervallTest = .5;  //Measuring interval during SLOW test
 float measuringIntervallTestFast = .15; ///Measuring interval during FAST test
 bool InvertMeasurments = true;  //inverts the Measurments to positve Values
+const int MinStrength = 50;  //Minimum Strength of the Tests (Used for Auto Abort)
+const int BreakMin = 10; //When the Value is smaller than this the test gets aborted (Used for Auto Abort)
 
 long tareValue;
 
@@ -57,7 +59,7 @@ byte modeAddition = 0;
 float currentSpeed = stepsPerSecond;    //SLOW Test speed
 float fastSpeed = 25 * stepsPerSecond;  //FAST Test speed (x25 = 25mm/min)
 long currentMicros = micros();
-long lastLoadValue = 0;
+long lastLoadValues = 0;
 long lastStep = 0;
 String inputString;
 float maxForce = 0;
@@ -68,6 +70,9 @@ bool debug = false; //debug mode to test the remote
 bool WriteToSD = false;
 bool SdInserted = false;
 float MeasurmentMaxValue = 0;
+const int LastMaxValuesSize = 5;    //Amount of the Last Values
+float LastMaxValues[LastMaxValuesSize]; //Circular Buffer of the Last Max Values
+byte LastMaxValuesIndex = 0;
 
 /////Library Config
 Hx711 loadCell(A1, A2);
@@ -250,7 +255,7 @@ void loop() {
 
   ///////////// Get load value
   currentMicros = micros();
-  if ((micros() - lastLoadValue) >= measuringIntervall * 1000000) {
+  if ((micros() - lastLoadValues) >= measuringIntervall * 1000000) {
     digitalWrite(led1Pin, HIGH);
     float loadValue = CalcLoadValue();
     Serial.println(loadValue);
@@ -261,7 +266,7 @@ void loop() {
       TestFile.close();
     }
     digitalWrite(led1Pin, LOW);
-    lastLoadValue = currentMicros;
+    lastLoadValues = currentMicros;
     if (mode == 1 && modeAddition == 1) {
       if (loadValue >= maxForce) {
         maxForce = loadValue;
@@ -280,9 +285,12 @@ void loop() {
         MeasurmentMaxValue = loadValue;
       }
 
-      if (MeasurmentMaxValue - loadValue >= TestStopDifferenz) {
+      PushToBuffer(loadValue);
 
-        AbortTest();
+      if (MeasurmentMaxValue > MinStrength) {
+        if (loadValue < BreakMin) {
+          AbortTest();
+        }
       }
     }
   }
@@ -427,13 +435,22 @@ void YoungsModule() {
 void AbortTest() {
   Log("Test aborted - entering manual mode");
   if (SdInserted) {
+    float Break = 0;
+    for (int i = 0; i < LastMaxValuesSize; i++) {
+      if (Break <= LastMaxValues[i]){
+        Break = LastMaxValues[i];
+      }
+    }
+
     File TestFile = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
     TestFile.println(0);
     TestFile.println("],");
-    TestFile.println(String("\"BreakPoint\":") + MeasurmentMaxValue);
+    TestFile.println(String("\"BreakPoint\":") + Break + String(","));
+    TestFile.println(String("\"Maximum\":") + MeasurmentMaxValue);
     TestFile.println("}");
     TestFile.close();
   }
+  Serial1.println("FinTest");
   printSpaces(5);
   WriteToSD = false;
   mode = 2;
@@ -532,6 +549,14 @@ void BleNewTest() {
       }
     }
   }
+}
+
+void PushToBuffer(int V) {
+  LastMaxValuesIndex++;
+  if (LastMaxValuesIndex == LastMaxValuesSize) {
+    LastMaxValuesIndex = 0;
+  }
+  LastMaxValues[LastMaxValuesIndex] = V;
 }
 
 void CheckSd() {

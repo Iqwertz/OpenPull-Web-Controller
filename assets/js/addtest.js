@@ -62,6 +62,7 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
             $scope.parameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
             $scope.parameter.unshift({Name: "Orientation", Value: $scope.Orientation, Unit: ""});
 
+            $scope.$parent.MoveEnable=false;
             BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes); //Start new Test with the entered test data
         }else{
             alert("Please Select Test Mode and set Name"); //Inform user that there is missing information

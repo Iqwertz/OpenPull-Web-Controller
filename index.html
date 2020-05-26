@@ -31,11 +31,11 @@
                         </button>
                     </div>
                     <div class="Move">
-                        <button ng-disabled="!BleStatus" ng-click="MoveUp()" class="button round" id="Up">
+                        <button ng-disabled="!MoveEnable" ng-click="MoveUp()" class="button round" id="Up">
                             <i class="fas fa-arrow-up"></i>
                         </button>
                         <input type="number" ng-model="MoveDistance" class="Distance"/>
-                        <button ng-disabled="!BleStatus" ng-click="MoveDown()" class="button round" id="Down">
+                        <button ng-disabled="!MoveEnable" ng-click="MoveDown()" class="button round" id="Down">
                             <i class="fas fa-arrow-down"></i>
                         </button>
                     </div>
