@@ -31,7 +31,7 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
     $scope.Notes="";   //Var containing the Notes
 
     $scope.NewParameterField="";   //Var containing the Text of the NewParameter Field
-    
+
     $scope.AddParameter = function() {   //Called when the + button is pressed // Adds a new Parameter to the List
         if($scope.NewParameterField!=""){   //Checks if ParameterField is filled
             $scope.parameter.push({Name: $scope.NewParameterField, Value: 0, Unit: ""});   //Pushes New Parameter to the Paremeter list
@@ -47,16 +47,16 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
         if($scope.Name!="" && $scope.SelectedMode!=null){ //Check if the Important information is given
             var Mode; //Selected Test Mode
-            
+
             //CHeck which TestMode is selected and set the correct Maschine Command
             if($scope.SelectedMode==$scope.TestModes[0]){
                 Mode="M10";
             } else if ($scope.SelectedMode==$scope.TestModes[1]){
                 Mode="M13";
             }
-            
+
             $scope.Sending=true;  //Activat Sending
-            
+
             //Add the selectable obtions to the parameter array
             $scope.parameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
             $scope.parameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
@@ -103,7 +103,8 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
 //Starts a new test by sending the metadata structured as json over ble
 //The function is only called when a new Test is started
-function BleStartNewTest(Name, Parameter, TestMode, Notes){   
+function BleStartNewTest(Name, Parameter, TestMode, Notes){ 
+    BleAddTestSendArray=[];
     BleAddTestSendArray.push("{");
     BleAddTestSendArray.push('"MetaData": {');
     BleAddTestSendArray.push('"Name": "' + Name + '",');
@@ -124,6 +125,7 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
 
     BleSendTestMode = TestMode;  //Set Send Test Mode
     AddingTest=true;            //Start Sending (This variable is used in the Ble receive data function to let it know that the received data should be processed diffrent)
+    ScrollTop();         //Scroll to Top to see progress data
     BleSendTestData();  //Start a new Test by calliing BleSendTestData with no parameter
 }
 
@@ -201,4 +203,8 @@ function SetSendStat(Percent){  //Set the Send Status to the angular controller 
     scope.$apply(function(){
         scope.SendingStatus = Math.round(Percent);
     })
+}
+
+function ScrollTop() {
+  document.getElementById("ControlsId").scrollTop = 0;
 }

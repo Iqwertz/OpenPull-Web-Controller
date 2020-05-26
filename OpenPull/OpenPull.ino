@@ -12,6 +12,7 @@
   ##### SPI
   ########################################*/
 
+/* Libraries */
 #include "hx711.h"
 //#include <AccelStepper.h>
 #include <SPI.h>
@@ -46,6 +47,7 @@ int speedPin = 5;
 int upPin = 4;
 int downPin = 10;
 int led1Pin = 7;
+int sdDetectPin = 12;
 
 
 
@@ -72,28 +74,27 @@ Hx711 loadCell(A1, A2);
 String RootFolderName = "OpenPull";
 int LastFileIndex;
 File Data;
-//AccelStepper Stepper;
 
 void setup() {
-  // Serial
+  // Serial (Serial1 is ble)
   Serial.begin(115200);
   Serial1.begin(19200);
 
   // Sd ini
-  Serial.print("Initializing SD card...");
-  if (!SD.begin()) {
-    Serial.println("initialization failed!");
-  } else {
-    SdInserted = true;
-  }
-  Serial.println("initialization done.");
-  delay(5000);
+  pinMode(sdDetectPin, INPUT_PULLUP);
 
-  if (SdInserted) {
-    SD.mkdir("/" + RootFolderName);
-    GetLastSdIndex();
-  }
+  if (digitalRead(sdDetectPin) == 0) {
+    Serial.print("Initializing SD card...");
+    if (!SD.begin()) {
+      Serial.println("initialization failed!");
+    } else {
+      SdInserted = true;
+    }
+    Serial.println("initialization done.");
+    delay(500);
 
+    SdIni();
+  }
   // Load Cell
   tareValue = loadCell.averageValue(32);
 
@@ -104,9 +105,6 @@ void setup() {
   digitalWrite(directionPin, dir);
   digitalWrite(stepPin, LOW);
   digitalWrite(enablePin, HIGH);
-
-  //stepper.setMaxSpeed(100);
-  //  stepper.setSpeed(50);
 
   //Up Button
   pinMode(upPin, INPUT);
@@ -126,8 +124,10 @@ void setup() {
 }
 
 void loop() {
+  /////////Sd
+  CheckSd();
+
   /////////////Ble Settings
-  Serial.println(digitalRead(4));
 
   int stringRead = 0;
   //Serial COmmunication
@@ -312,16 +312,23 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(4);
     digitalWrite(stepPin, LOW);
+
     if (Serial1.available()) {
       if (Serial1.readString() == "S ") {
         i = Steps;
       }
     }
-    /* if(millis()-LastMillis>=500){
-       Serial.println(CalcLoadValue()){
-         LastMillis=millis();
-       }
-      }*/
+
+    /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
+    /*
+      if (millis() - LastMillis >= 500) {
+      float CValue = CalcLoadValue();
+      if (CValue >= 20) {
+        i = Steps;
+      }
+      LastMillis = millis();
+
+      } */
   }
   delay(100);
   digitalWrite(enablePin, HIGH);
@@ -431,7 +438,7 @@ void AbortTest() {
   WriteToSD = false;
   mode = 2;
   modeAddition = 0;
-  measuringIntervall = 2;
+  measuringIntervall = .5;
   currentSpeed = stepsPerSecond;
   MeasurmentMaxValue = 0;
   digitalWrite(enablePin, HIGH);
@@ -440,7 +447,6 @@ void AbortTest() {
 void GetLastSdIndex() {
   File Index;
   if (SD.exists(RootFolderName + "/INDEX.txt")) {
-    Serial.println("Exists");
     String i;
     Index = SD.open(RootFolderName + "/INDEX.txt");
     if (Index.available())
@@ -454,9 +460,22 @@ void GetLastSdIndex() {
     Index.println("0;");
     Index.close();
     LastFileIndex = 0;
-    Serial.println("NEW");
   }
 }
+
+//this function handles the new test send protocol
+//The Send Protocoll is:
+//The PC sends "NEW" to make a new File on the maschine and set it into testdata recieve mode
+//The Maschine sends "OK NEW" to confirm that a new test is started
+//The PC sends the string of the first index in the BleAddTestSendArray
+//The Maschine receives the data and sends it back
+//The Pc check if the sent data was correct. If it was it sends "OK" and the next line. In not it sends "FALSE" and it resends the same data with a delay of 300milliseconds to avoid "gatt opertion in progress" error
+//If the Maschine receives "OK" it writes the last data to the current file and it sends the new received data back, if "FALSE" or anything else it delets the received data
+//This sending loop repeats until every string in the BleAddTestSendArray is sent
+//When everything in the BleAddTestSendArray is sent the Pc sents "OKEND " with the Test Mode
+//WHen the Maschine receives "OKEND" it closes the opened file and starts the test with the received test mode
+
+//I implemented this send protocol to make sure the sent data is 100% correct (When developing I often had faulty data which destroyed everything)
 
 void BleNewTest() {
   File NewTest;
@@ -512,5 +531,32 @@ void BleNewTest() {
         LastString = "";
       }
     }
+  }
+}
+
+void CheckSd() {
+  if (SdInserted) {
+    if (digitalRead(sdDetectPin) == 1) {
+      SdInserted = false;
+      Serial1.println("AAttention! Sd Card got removed. No data will be recorded");
+    }
+  } else {
+    if (digitalRead(sdDetectPin) == 0) {
+      delay(100);
+      if (SD.begin()) {
+        SdInserted = true;
+        delay(500);
+        SdIni();
+        Serial1.println("ASd Card got Inserted");
+      }
+    }
+  }
+}
+
+//////Function that Initializes Sd Card and Creates Directory if missing
+void SdIni() {
+  if (SdInserted) {
+    SD.mkdir("/" + RootFolderName);
+    GetLastSdIndex();
   }
 }

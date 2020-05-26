@@ -109,7 +109,10 @@ function handleNotifications(event) {
                         addData(Number(data.substr(1)));  //Get Value and set it to the chart
                     }else if (data.charAt(0)=="C"){   //Log data
                         console.log(data.substr(1));   //Get the Value and log it
-                    }else if (data=="SDfalse"){  // Akert that no sd is in the maschine
+                    }else if (data.charAt(0)=="A"){  // If hte command starts with "A" it is an alert
+                        console.log(data.substr(1));
+                        alert(data.substr(1));
+                    }else if (data=="SDfalse"){  // Alert that no sd is in the maschine
                         alert("Attention! No Sd Card! Restart the Arduino if Sd card is inserted");
                     }
                 }else{
