@@ -1,6 +1,11 @@
+input[type="checkbox"]{
+    -webkit-appearance: checkbox;
+}
+
 input[type="submit"],
 input[type="reset"],
 input[type="button"],
+input[type="radio"]
 button,
 .button {
     background-color: _palette(accent3);

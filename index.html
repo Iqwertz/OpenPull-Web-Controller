@@ -37,7 +37,7 @@
                         <input type="number" ng-model="MoveDistance" class="Distance"/>
                         <button ng-disabled="!MoveEnable" ng-click="MoveDown()" class="button round" id="Down">
                             <i class="fas fa-arrow-down"></i>
-                        </button>
+                        </button>s
                     </div>
                 </div>
             </div>
@@ -126,6 +126,10 @@
                         <select ng-model="SelectedMode" ng-options="x for x in TestModes">
                             <option value="" disabled selected>Select TestMode</option>
                         </select>
+                        <br/>
+                        Autoabort:
+                        <br/>
+                        <input type="checkbox" ng-model="AutoAbort" />
                         <br />
                         Notes (optional):
                         <br />

@@ -56,9 +56,13 @@ input, select, textarea {
   -ms-appearance: none;
   appearance: none; }
 
+input[type="checkbox"] {
+  -webkit-appearance: checkbox; }
+
 input[type="submit"],
 input[type="reset"],
 input[type="button"],
+input[type="radio"]
 button,
 .button {
   background-color: #56ff83;
@@ -83,19 +87,22 @@ button,
   input[type="submit"]:hover,
   input[type="reset"]:hover,
   input[type="button"]:hover,
-  button:hover,
+  input[type="radio"]
+button:hover,
   .button:hover {
     background-color: #f3f3f3; }
   input[type="submit"]:active,
   input[type="reset"]:active,
   input[type="button"]:active,
-  button:active,
+  input[type="radio"]
+button:active,
   .button:active {
     background-color: #e6e6e6; }
   input[type="submit"].primary,
   input[type="reset"].primary,
   input[type="button"].primary,
-  button.primary,
+  input[type="radio"]
+button.primary,
   .button.primary {
     background-color: #35FF83;
     box-shadow: none;
@@ -103,19 +110,22 @@ button,
     input[type="submit"].primary:hover,
     input[type="reset"].primary:hover,
     input[type="button"].primary:hover,
-    button.primary:hover,
+    input[type="radio"]
+button.primary:hover,
     .button.primary:hover {
       background-color: #57a3ce; }
     input[type="submit"].primary:active,
     input[type="reset"].primary:active,
     input[type="button"].primary:active,
-    button.primary:active,
+    input[type="radio"]
+button.primary:active,
     .button.primary:active {
       background-color: #35FF83; }
   input[type="submit"].round,
   input[type="reset"].round,
   input[type="button"].round,
-  button.round,
+  input[type="radio"]
+button.round,
   .button.round {
     text-align: center center;
     font-size: 2.7rem;
@@ -125,7 +135,8 @@ button,
     input[type="submit"].round i,
     input[type="reset"].round i,
     input[type="button"].round i,
-    button.round i,
+    input[type="radio"]
+button.round i,
     .button.round i {
       position: absolute;
       top: 50%;
@@ -134,7 +145,8 @@ button,
   input[type="submit"].smallround,
   input[type="reset"].smallround,
   input[type="button"].smallround,
-  button.smallround,
+  input[type="radio"]
+button.smallround,
   .button.smallround {
     text-align: center center;
     font-size: 2rem;
@@ -145,7 +157,8 @@ button,
     input[type="submit"].smallround i,
     input[type="reset"].smallround i,
     input[type="button"].smallround i,
-    button.smallround i,
+    input[type="radio"]
+button.smallround i,
     .button.smallround i {
       position: absolute;
       top: 50%;
@@ -154,7 +167,8 @@ button,
   input[type="submit"].small,
   input[type="reset"].small,
   input[type="button"].small,
-  button.small,
+  input[type="radio"]
+button.small,
   .button.small {
     font-size: 0.8rem;
     height: 3rem;
@@ -163,7 +177,8 @@ button,
   input[type="submit"].large,
   input[type="reset"].large,
   input[type="button"].large,
-  button.large,
+  input[type="radio"]
+button.large,
   .button.large {
     font-size: 1.20rem;
     height: 4.8rem;
@@ -172,13 +187,15 @@ button,
   input[type="submit"].wide,
   input[type="reset"].wide,
   input[type="button"].wide,
-  button.wide,
+  input[type="radio"]
+button.wide,
   .button.wide {
     min-width: 13rem; }
   input[type="submit"].fit,
   input[type="reset"].fit,
   input[type="button"].fit,
-  button.fit,
+  input[type="radio"]
+button.fit,
   .button.fit {
     width: 100%; }
 
