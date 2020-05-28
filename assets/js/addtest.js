@@ -60,6 +60,8 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
                 Mode="M10"+addition;
             } else if ($scope.SelectedMode==$scope.TestModes[1]){
                 Mode="M13"+addition;
+            }else if ($scope.SelectedMode==$scope.TestModes[2]){
+                Mode="M14"+addition;
             }
 
             $scope.Sending=true;  //Activat Sending

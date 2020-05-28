@@ -17,7 +17,7 @@ var Config = {
         },
 
         TestModes:{
-          Options: ["Slow Test (M10)", "Fast Test (M13)"]  
+          Options: ["Slow Test (M10)", "Modulus Test (M13)", "Fast Test (M14)"]  
         },
         
         Parameter: [
