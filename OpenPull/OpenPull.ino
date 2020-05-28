@@ -28,6 +28,8 @@ const int BreakMin = 10; //When the Value is smaller than this the test gets abo
 
 long tareValue;
 
+float SdWriteIntervall = .5;
+bool WriteWhenTighten = true;  //When enabled the Data will be written to the Sd only when the sample is tightend (Force gets applied)
 int TestStopDifferenz = 200;
 ////// Stepper Variables
 
@@ -276,9 +278,17 @@ void loop() {
     Serial.println(loadValue);
     Serial1.println(String("V") + loadValue);
     if (WriteToSD) {
-      File TestFile = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
-      TestFile.println(loadValue + String(","));
-      TestFile.close();
+      if (WriteWhenTighten) {
+        if (loadValue > 5) {
+          File TestFile = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
+          TestFile.println(loadValue + String(","));
+          TestFile.close();
+        }
+      } else {
+        File TestFile = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
+        TestFile.println(loadValue + String(","));
+        TestFile.close();
+      }
     }
     digitalWrite(led1Pin, LOW);
     lastLoadValues = currentMicros;
@@ -462,6 +472,7 @@ void AbortTest() {
     File TestFile = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
     TestFile.println(0);
     TestFile.println("],");
+    TestFile.println(String("\"MeasuringIntervall\":") + measuringIntervall + String(","));
     TestFile.println(String("\"BreakPoint\":") + BreakPoint + String(","));
     TestFile.println(String("\"Maximum\":") + MeasurmentMaxValue);
     TestFile.println("}");
