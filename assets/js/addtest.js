@@ -157,6 +157,11 @@ function BleSendTestData(respons){
     if(respons){
         if(respons=="OK NEW"){
             send(BleAddTestSendArray[BleSendDataIndex]);
+        }else if(respons=="OK NEW NOSD"){  //When no Sd Card is sent, skip sending queue and start Test
+            send("END "+BleSendTestMode);
+            AddingTest=false;
+            var scope = angular.element(document.getElementById("NewTest")).scope(); //Accsess Angular Controler
+            scope.ExitStartTest();   //Exit the Start Test Screen
         }else{
             if(respons==BleAddTestSendArray[BleSendDataIndex]){
                 BleSendDataIndex++;
@@ -216,5 +221,5 @@ function SetSendStat(Percent){  //Set the Send Status to the angular controller 
 }
 
 function ScrollTop() {
-  document.getElementById("ControlsId").scrollTop = 0;
+    document.getElementById("ControlsId").scrollTop = 0;
 }

@@ -533,8 +533,11 @@ void BleNewTest() {
 
     NewTest = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
     Serial1.println("OK NEW");
-    Serial.println("New Test");
+  } else {
+    Serial1.println("OK NEW NOSD");
   }
+  Serial.println("New Test");
+
   bool FinishedIni = false;
   String LastString = "";
   String NextInput = "";
