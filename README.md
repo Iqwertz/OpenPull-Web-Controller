@@ -40,7 +40,12 @@ My SD card Module didn't had an Sd Detect pin but I found out that it can be add
 
 When everything is wired up, upload the OpenPull.ino to the arduino. Then insert an empty SDcard and plugin the power supply. The Maschine is now ready.
 
-[Measure Steps per mm]
+When the Maschine isnt moving the correct amount of distance you need to adjust the stepsPerMM var in the code.
+```C++
+
+long stepsPerMM = 39000;
+
+```
 
 ## Use 
 ---
