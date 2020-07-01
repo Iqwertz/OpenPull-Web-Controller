@@ -4,7 +4,7 @@
 ## Introduction
 The OpenPull-Web-Controller is an upgrade for the [DIY Universal test machine](https://github.com/CNCKitchen/Open-Pull) by [CNCKitchen](https://github.com/CNCKitchen).
 It ads Bluetooth and Sd functionality to the test Maschine. 
-The machine can be controlled over this webinterface: [https://iqwertz.github.io/VWA/](https://iqwertz.github.io/VWA/)
+The machine can be controlled over this webinterface: [https://iqwertz.github.io/OpenPullController/](https://iqwertz.github.io/OpenPullController/)
 
 # Upgrade it
 ---
@@ -50,7 +50,7 @@ long stepsPerMM = 39000;
 ## Use 
 ---
 
-To use the Maschine go to [https://iqwertz.github.io/VWA/](https://iqwertz.github.io/VWA/).
+To use the Maschine go to [https://iqwertz.github.io/OpenPullController/](https://iqwertz.github.io/OpenPullController/).
 
 Click on the Bluetooth Symbol in the Top left corner and select the Maschine (The Name is most of the time the producers Name. Mine is DSD Tech as an example.) When the connection is succesfull, you should be able to move it up and down by clicking the arrows.
 
@@ -76,7 +76,7 @@ When an SD Card is inserted, test Data will get saved to it. It is located in an
 
 !!!Important: Do not delete the index.txt file. It keeps track of the last file index. If you want to delete the whole Test Data delete the Folder!!!
 
-To view the Test Data the [online Viewer](https://iqwertz.github.io/VWA/Visualizer/) can be used! 
+To view the Test Data the [online Viewer](https://iqwertz.github.io/Visualizer/) can be used! 
 
 Repository of the Data Visualizer: [github.com/Iqwertz/OpenPullTestDataVisualizer](https://github.com/Iqwertz/OpenPullTestDataVisualizer)
 
