@@ -10,13 +10,11 @@
   ##### Sd
   ##### SPI
   ########################################*/
-
 /* Libraries */
 #include "hx711.h"
 //#include <AccelStepper.h>
 #include <SPI.h>
 #include <SD.h>
-
 ////// Load Cell Variables
 float gainValue = -875.7 * (1 - 0.001); //CALIBRATION FACTOR
 float measuringIntervall = .5;       //Measuring interval when IDLE
@@ -25,23 +23,19 @@ float measuringIntervallTestFast = .15; ///Measuring interval during FAST test
 bool InvertMeasurments = true;  //inverts the Measurments to positve Values
 const int MinStrength = 50;  //Minimum Strength of the Tests (Used for Auto Abort)
 const int BreakMin = 10; //When the Value is smaller than this the test gets aborted (Used for Auto Abort)
-
 long tareValue;
-
 float SdWriteIntervall = .5;
 bool WriteWhenTighten = true;  //When enabled the Data will be written to the Sd only when the sample is tightend (Force gets applied)
 int TestStopDifferenz = 200;
+int MaxNeg = -200; //Values below that durring tests get filterd out
 ////// Stepper Variables
-
 int pulseLength = 10;
 long stepsPerMM = 39000;// 200 * 2 * (13 + 212.0 / 289.0) / 2; // Steps per rev * Microstepping * Gear reduction ratio / Pitch
 float stepsPerSecond = stepsPerMM / 60; //1mm/min
 int slowSpeedDelay = 3000;    //Time delay between steps for jogging slowly
 int fastSpeedDelay = 300;     ////Time delay between steps for jogging fast
 boolean dir = 0;
-
 long MoveStepsMM = 39000;
-
 ////// PIN definitions
 int directionPin = 2;
 int stepPin = 3;
@@ -51,9 +45,6 @@ int upPin = 4;
 int downPin = 10;
 int led1Pin = 7;
 int sdDetectPin = 12;
-
-
-
 ///// Variables
 byte mode = 2;
 byte modeAddition = 0;
@@ -76,21 +67,17 @@ const int LastMaxValuesSize = 5;    //Amount of the Last Values
 float LastMaxValues[LastMaxValuesSize]; //Circular Buffer of the Last Max Values
 byte LastMaxValuesIndex = 0;
 bool AutoAbort = true;
-
 /////Library Config
 Hx711 loadCell(A1, A2);
 String RootFolderName = "OpenPull";
 int LastFileIndex;
 File Data;
-
 void setup() {
   // Serial (Serial1 is ble)
   Serial.begin(115200);
   Serial1.begin(19200);
-
   // Sd ini
   pinMode(sdDetectPin, INPUT_PULLUP);
-
   if (digitalRead(sdDetectPin) == 0) {
     Serial.print("Initializing SD card...");
     if (!SD.begin()) {
@@ -100,12 +87,10 @@ void setup() {
     }
     Serial.println("initialization done.");
     delay(500);
-
     SdIni();
   }
   // Load Cell
   tareValue = loadCell.averageValue(32);
-
   // Stepper
   pinMode(directionPin, OUTPUT);
   pinMode(stepPin, OUTPUT);
@@ -113,37 +98,29 @@ void setup() {
   digitalWrite(directionPin, dir);
   digitalWrite(stepPin, LOW);
   digitalWrite(enablePin, HIGH);
-
   //Up Button
   pinMode(upPin, INPUT);
   digitalWrite(upPin, HIGH);
-
   //Down Button
   pinMode(downPin, INPUT);
   digitalWrite(downPin, HIGH);
-
   //Speed Switch
   pinMode(speedPin, INPUT);
   digitalWrite(speedPin, HIGH);
-
   //LED Pin
   pinMode(led1Pin, OUTPUT);
   digitalWrite(led1Pin, LOW);
 }
-
 void loop() {
   /////////Sd
   CheckSd();
-
   /////////////Ble Settings
-
   int stringRead = 0;
   //Serial COmmunication
   inputString = "";
   while (Serial1.available())
   {
     inputString = Serial1.readString();
-
     if (inputString == "NEW") {
       BleNewTest();
     } else if (inputString == "SdStat") {
@@ -151,10 +128,8 @@ void loop() {
         Serial1.println("SDfalse");
       }
     }
-
     stringRead = 1;
   }
-
   while (Serial.available())
   {
     inputString = Serial.readString();
@@ -258,7 +233,6 @@ void loop() {
   ///////////////// Tensile Test Mode ////////////
   if (mode == 1) {
     TensileTest();
-
     ///////////////// MANUAL MODE //////////////////
   } else if (mode == 2) {
     ManualMode();
@@ -269,7 +243,6 @@ void loop() {
   } else if (mode == 4) {
     YoungsModule();
   }
-
   ///////////// Get load value
   currentMicros = micros();
   if ((micros() - lastLoadValues) >= measuringIntervall * 1000000) {
@@ -304,14 +277,11 @@ void loop() {
         modeAddition = 0;
       }
     }
-
     if (mode != 2) {
       if (loadValue > MeasurmentMaxValue) {
         MeasurmentMaxValue = loadValue;
       }
-
       PushToBuffer(loadValue);
-
       if (MeasurmentMaxValue > MinStrength) {
         if (loadValue < BreakMin) {
           BreakPoint = 0;
@@ -320,16 +290,16 @@ void loop() {
               BreakPoint = LastMaxValues[i];
             }
           }
-
-          if (AutoAbort) {
-            AbortTest();
+          if (loadValue > MaxNeg) {
+            if (AutoAbort) {
+              AbortTest();
+            }
           }
         }
       }
     }
   }
 }
-
 float CalcLoadValue() {
   float lV = (loadCell.averageValue(1) - tareValue) / gainValue;
   if (InvertMeasurments) {
@@ -337,7 +307,6 @@ float CalcLoadValue() {
   }
   return lV;
 }
-
 void Move(int distance) {  //This function moves the Maschine the given amount of mm
   digitalWrite(enablePin, LOW);
   Serial.println(distance);
@@ -347,20 +316,16 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
     digitalWrite(directionPin, LOW);
   }
   long Steps = MoveStepsMM * abs(distance);
-
   long LastMillis = millis();
-
   for (long i = 0; i <= Steps; i++) {
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(4);
     digitalWrite(stepPin, LOW);
-
     if (Serial1.available()) {
       if (Serial1.readString() == "S ") {
         i = Steps;
       }
     }
-
     /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
     /*
       if (millis() - LastMillis >= 500) {
@@ -369,24 +334,20 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
         i = Steps;
       }
       LastMillis = millis();
-
       } */
   }
   delay(100);
   digitalWrite(enablePin, HIGH);
 }
-
 void printSpaces(int numberOfSpaces) { //This function will print a given amount of empty lines
   for (int i = numberOfSpaces; i > 0; i--) {
     Log("");
   }
 }
-
 void Log(String msg) {
   Serial.println(msg);
   //  Serial1.println("C" + msg);
 }
-
 void TensileTest() {
   currentMicros = micros();
   if ((currentMicros - lastStep) >= 1000000. / currentSpeed) {
@@ -398,9 +359,7 @@ void TensileTest() {
   if (!digitalRead(downPin)) { //Stop test if DOWN Button is pressed
     AbortTest();
   }
-
 }
-
 void ManualMode() {
   boolean performStep = 0;
   if (!digitalRead(upPin)) {
@@ -433,9 +392,7 @@ void ManualMode() {
       Log("Fast Speed");
     }
   }
-
 }
-
 void FastTest() {
   currentMicros = micros();
   if ((currentMicros - lastStep) >= 1000000. / fastSpeed) {
@@ -448,7 +405,6 @@ void FastTest() {
     AbortTest();
   }
 }
-
 void YoungsModule() {
   currentMicros = micros();
   if ((currentMicros - lastStep) >= 1000000. / currentSpeed) {
@@ -465,7 +421,6 @@ void YoungsModule() {
     AbortTest();
   }
 }
-
 void AbortTest() {
   Log("Test aborted - entering manual mode");
   if (SdInserted) {
@@ -478,7 +433,7 @@ void AbortTest() {
     TestFile.println("}");
     TestFile.close();
   }
-  Serial1.println("FinTest");
+  Serial1.println(String("FinTest B") + BreakPoint + String(";M") +MeasurmentMaxValue );
   printSpaces(5);
   WriteToSD = false;
   mode = 2;
@@ -488,7 +443,6 @@ void AbortTest() {
   MeasurmentMaxValue = 0;
   digitalWrite(enablePin, HIGH);
 }
-
 void GetLastSdIndex() {
   File Index;
   if (SD.exists(RootFolderName + "/INDEX.txt")) {
@@ -507,7 +461,6 @@ void GetLastSdIndex() {
     LastFileIndex = 0;
   }
 }
-
 //this function handles the new test send protocol
 //The Send Protocoll is:
 //The PC sends "NEW" to make a new File on the maschine and set it into testdata recieve mode
@@ -519,9 +472,7 @@ void GetLastSdIndex() {
 //This sending loop repeats until every string in the BleAddTestSendArray is sent
 //When everything in the BleAddTestSendArray is sent the Pc sents "OKEND " with the Test Mode
 //WHen the Maschine receives "OKEND" it closes the opened file and starts the test with the received test mode
-
 //I implemented this send protocol to make sure the sent data is 100% correct (When developing I often had faulty data which destroyed everything)
-
 void BleNewTest() {
   File NewTest;
   if (SdInserted) {
@@ -530,18 +481,15 @@ void BleNewTest() {
     N = SD.open(RootFolderName + "/INDEX.txt", O_READ | O_WRITE | O_CREAT | O_TRUNC);
     N.println(LastFileIndex);
     N.close();
-
     NewTest = SD.open(RootFolderName + "/" + LastFileIndex + ".txt", FILE_WRITE);
     Serial1.println("OK NEW");
   } else {
     Serial1.println("OK NEW NOSD");
   }
   Serial.println("New Test");
-
   bool FinishedIni = false;
   String LastString = "";
   String NextInput = "";
-
   while (!FinishedIni) {
     if (Serial1.available() || NextInput != "") {
       String s;
@@ -581,7 +529,6 @@ void BleNewTest() {
     }
   }
 }
-
 void PushToBuffer(int V) {
   LastMaxValuesIndex++;
   if (LastMaxValuesIndex == LastMaxValuesSize) {
@@ -589,7 +536,6 @@ void PushToBuffer(int V) {
   }
   LastMaxValues[LastMaxValuesIndex] = V;
 }
-
 void CheckSd() {
   if (SdInserted) {
     if (digitalRead(sdDetectPin) == 1) {
@@ -607,8 +553,10 @@ void CheckSd() {
       }
     }
   }
+  Serial.print(digitalRead(sdDetectPin));
+  Serial.print(",");
+  Serial.println(SdInserted);
 }
-
 //////Function that Initializes Sd Card and Creates Directory if missing
 void SdIni() {
   if (SdInserted) {

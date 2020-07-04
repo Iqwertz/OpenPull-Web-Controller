@@ -5,10 +5,14 @@
 var AddingTest = false;   //Determin if a test is currently added
 var BleAddTestSendArray = [];   //Array contaiing the Data to be send over ble. Every String is a new Line in the File Created on the maschines Sd card
 //var LastAddedData = ""; 
-var BleSendDataIndex = 0;   //Index of the currently sended String in the BleAddTestSendArray
+var BleSendDataIndex = -1;   //Index of the currently sended String in the BleAddTestSendArray
 //var BleSendDelay = 0;
 var BleSendTestMode;    //Containing the Test Mode of the currently added Test (Needs to be seperat global because it is used to start the Test at the end of data sending)
 
+const MaxSendingErrors = 10; //Max Amount of Sending Errors when Starting a new Test until sending get aborted.
+const BleSendTimeout = 2000; //Max no respons Time until Sending is aborted
+
+var SendingErrors=0;
 /////////Angularjs Controller////////////////
 app.controller('AddTest', function($scope) {   //Start new addTest Controller
     $scope.Name="";   //Var Holding the Name of the Controller
@@ -58,7 +62,7 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
             }
             if($scope.SelectedMode==$scope.TestModes[0]){
                 Mode="M10"+addition;
-            } else if ($scope.SelectedMode==$scope.TestModes[1]){
+            } else if ($scope.SelectedMode==$scope.TestModes[1]){ 
                 Mode="M13"+addition;
             }else if ($scope.SelectedMode==$scope.TestModes[2]){
                 Mode="M14"+addition;
@@ -66,39 +70,41 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
             $scope.Sending=true;  //Activat Sending
 
+            var AssembledParameter = Object.create($scope.parameter);  //Array which will also contain the selectable Parameter
             //Add the selectable obtions to the parameter array
-            $scope.parameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
-            $scope.parameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
-            $scope.parameter.unshift({Name: "Orientation", Value: $scope.Orientation, Unit: ""});
-
+            AssembledParameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
+            AssembledParameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
+            AssembledParameter.unshift({Name: "Orientation", Value: $scope.Orientation, Unit: ""});
             $scope.$parent.MoveEnable=false;
-            BleStartNewTest($scope.Name, $scope.parameter, Mode, $scope.Notes); //Start new Test with the entered test data
+            BleStartNewTest($scope.Name, AssembledParameter, Mode, $scope.Notes); //Start new Test with the entered test data
+
         }else{
             alert("Please Select Test Mode and set Name"); //Inform user that there is missing information
         }
     }
 
     $scope.ExitStartTest =function(){     //Called when the data sending is finished   //Resets the vars and moves to the main screen 
-        BleSendDataIndex = 0;
+        BleSendDataIndex = -1;
         $scope.Sending=false;
         $scope.$parent.ControllerInterface=true;
+        SendingErrors = 0;
     }
 
     $scope.SetDefault = function(){   //Resets the Data to the Defaut defined in the config.js file
         $scope.Name="";
 
-        $scope.InfillTypeOptions = Config.StandardTestParameter.InfillType.Options;
-        $scope.InfillType = Config.StandardTestParameter.InfillType.Default;
+        $scope.InfillTypeOptions = Object.create(Config.StandardTestParameter.InfillType.Options);
+        $scope.InfillType = Object.create(Config.StandardTestParameter.InfillType.Default);
 
-        $scope.MaterialTypeOptions = Config.StandardTestParameter.MaterialType.Options;
-        $scope.MaterialType = Config.StandardTestParameter.MaterialType.Default;
+        $scope.MaterialTypeOptions = Object.create(Config.StandardTestParameter.MaterialType.Options);
+        $scope.MaterialType = Object.create(Config.StandardTestParameter.MaterialType.Default);
 
-        $scope.OrientationOptions = Config.StandardTestParameter.Orientation.Options;
-        $scope.Orientation = Config.StandardTestParameter.Orientation.Default;
+        $scope.OrientationOptions = Object.create(Config.StandardTestParameter.Orientation.Options);
+        $scope.Orientation = Object.create(Config.StandardTestParameter.Orientation.Default);
 
-        $scope.parameter = Config.StandardTestParameter.Parameter;
+        $scope.parameter = Object.create(Config.StandardTestParameter.Parameter);
 
-        $scope.TestModes = Config.StandardTestParameter.TestModes.Options;
+        $scope.TestModes = Object.create(Config.StandardTestParameter.TestModes.Options);
         $scope.SelectedMode = "";
 
 
@@ -156,6 +162,7 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
 function BleSendTestData(respons){
     if(respons){
         if(respons=="OK NEW"){
+            BleSendDataIndex=0;
             send(BleAddTestSendArray[BleSendDataIndex]);
         }else if(respons=="OK NEW NOSD"){  //When no Sd Card is sent, skip sending queue and start Test
             send("END "+BleSendTestMode);
@@ -176,8 +183,20 @@ function BleSendTestData(respons){
                     //setTimeout(function () {send(BleAddTestSendArray[BleSendDataIndex])},BleSendDelay);
                 }
             }else{
-                send("FALSE");
-                setTimeout(function () {send("OK"+BleAddTestSendArray[BleSendDataIndex])},300);
+                SendingErrors++;
+               // send("FALSE");
+                if(SendingErrors>MaxSendingErrors){
+                    alert("Could not start Test! Try reloading page and restarting Maschine")
+                    AddingTest=false;
+                    var scope = angular.element(document.getElementById("NewTest")).scope(); //Accsess Angular Controler
+                    scope.ExitStartTest();
+                }else{
+                    if(BleSendDataIndex!=-1){
+                        setTimeout(function () {send("OK"+BleAddTestSendArray[BleSendDataIndex])},300);
+                    }else{
+                        send("NEW");
+                    }
+                }
             }
         }
     }else{

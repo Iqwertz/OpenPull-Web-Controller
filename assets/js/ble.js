@@ -64,6 +64,7 @@ function handleDisconnection(event) {   //function that trys to reconnect if con
             console.log('> Notifications started');
             charackteristicsCache.addEventListener('characteristicvaluechanged',     handleNotifications);
             SetBleVar(true);  //Set the Ble var to activate the ble buttons
+            
         });
     }).
     catch(error => console.log(error));
@@ -114,8 +115,9 @@ function handleNotifications(event) {
                         alert(data.substr(1));
                     }else if (data=="SDfalse"){  // Alert that no sd is in the maschine
                         alert("Attention! No Sd Card!");
-                    }else if (data=="FinTest"){  // Alert that no sd is in the maschine
-                        alert("Test Finished");
+                    }else if (data.substr(0,7)=="FinTest"){  // Alert that no sd is in the maschine
+                        console.log("Test Finished, Maximum: " + data.substr(data.indexOf("B")+1,data.indexOf(";")) + " / Breakpoint: " + data.substr(data.indexOf("M")+1));
+                        alert("Test Finished, Maximum: " + data.substr(data.indexOf("M")+1) + " / Breakpoint: " + data.substring(data.indexOf("B")+1,data.indexOf(";")));
                         var scope = angular.element(document.getElementById("ControlsId")).scope();
                         scope.$apply(function(){
                             scope.MoveEnable = true;
@@ -162,6 +164,11 @@ function writeToCharacteristic(characteristic, data) {
 } 
 
 function SetBleVar(state){
+    if(state){
+          // alert("Bluetooth Connected")
+    }else{
+           alert("Bluetooth Disconnected")
+    }
     var scope = angular.element(document.getElementById("ControlsId")).scope();
     scope.$apply(function(){
         scope.BleStatus = state;

@@ -30,7 +30,7 @@ var LiveChart = new Chart(ctx, {
         responsive: true,
         tooltips: {
             mode: 'ipoint',
-          //  intersect: false,
+            //  intersect: false,
         },
         hover: {
             mode: 'nearest', 
@@ -60,27 +60,36 @@ var LiveChart = new Chart(ctx, {
     }
 });
 
-function addData(data, steps) {  //add Data to the Chart //steps is optionsal
+function addData(data, steps) {  //add Data to the Chart //steps is optional
     var DataSteps = steps || DefaultStepSize;  //Set Datasteps
-    var LD=LiveChart.data.labels;  //Get The Labels of the CHart
+    var LD=LiveChart.data.labels;  //Get The Labels of the Chart
     LD.push((Number(LD[LD.length-1])+DataSteps).toString());   //Set the label of the char by increasing the last label by the Datasteps
     var DatasetData=LiveChart.data.datasets[0].data;   //Get the Char data
     DatasetData.push(data);  //Add the data to the Chardata array
-    if(DatasetData.length>DisplayedValues){ //When the amount of data is greater than the max amount of displayed Values 
-        DatasetData.shift(); //remove first data
-        LD.shift();  //remove first label
+
+    var scope = angular.element(document.getElementById("ControlsId")).scope();
+    if(scope.MoveEnable){
+        if(DatasetData.length==DisplayedValues){ //When the amount of data is greater than the max amount of displayed Values 
+            DatasetData.shift(); //remove first data
+            LD.shift();  //remove first label
+        }else if(DatasetData.length>DisplayedValues){
+            for(var i=0; i<DatasetData.length-DisplayedValues; i++){
+                DatasetData.shift(); //remove first data
+                LD.shift();  //remove first label
+            }
+        }
     }
     LiveChart.update();  //Update Chart
 }
 
 function innerDimensions(id){   //get the dimensions of a div with padding
-   var node= document.getElementById(id)
-  var computedStyle = getComputedStyle(node);
+    var node= document.getElementById(id)
+    var computedStyle = getComputedStyle(node);
 
-  let width = node.clientWidth; // width with padding
-  let height = node.clientHeight; // height with padding
+    let width = node.clientWidth; // width with padding
+    let height = node.clientHeight; // height with padding
 
-  height -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
-  width -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
-  return { height, width };
+    height -= parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+    width -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+    return { height, width };
 }
