@@ -35,6 +35,11 @@ float stepsPerSecond = stepsPerMM / 60; //1mm/min
 int slowSpeedDelay = 3000;    //Time delay between steps for jogging slowly
 int fastSpeedDelay = 300;     ////Time delay between steps for jogging fast
 boolean dir = 0;
+/////Stepper Linear Accel Settings
+int StartSpeed = 800; //Delay (ms) per Step at the Start of a Move
+int EndSpeed = 1;  //Delay (ms) per Step when at full Speed
+float AccelSteps = .5; //Slope of the Linear Acceleration
+
 long MoveStepsMM = 39000;
 ////// PIN definitions
 int directionPin = 2;
@@ -317,9 +322,22 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
   }
   long Steps = MoveStepsMM * abs(distance);
   long LastMillis = millis();
+  float StepDelay = StartSpeed;
+  int DecellerationSteps=(StartSpeed - EndSpeed) / AccelSteps;
   for (long i = 0; i <= Steps; i++) {
+    if (Steps - i < DecellerationSteps) {
+      if (StepDelay < StartSpeed) {
+        StepDelay += AccelSteps;
+      }
+    } else {
+      if (StepDelay >= EndSpeed) {
+        StepDelay -= AccelSteps;
+      } else {
+        StepDelay = EndSpeed;
+      }
+    }
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(4);
+    delayMicroseconds(floor(StepDelay));
     digitalWrite(stepPin, LOW);
     if (Serial1.available()) {
       if (Serial1.readString() == "S ") {
@@ -433,7 +451,7 @@ void AbortTest() {
     TestFile.println("}");
     TestFile.close();
   }
-  Serial1.println(String("FinTest B") + BreakPoint + String(";M") +MeasurmentMaxValue );
+  Serial1.println(String("FinTest B") + BreakPoint + String(";M") + MeasurmentMaxValue );
   printSpaces(5);
   WriteToSD = false;
   mode = 2;
