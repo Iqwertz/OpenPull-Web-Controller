@@ -90,6 +90,10 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
         SendingErrors = 0;
     }
 
+    $scope.TriggerUpload = function(){  //triggers upload gcode file field
+        document.getElementById("fileUpload").click();
+    }
+
     $scope.SetDefault = function(){   //Resets the Data to the Defaut defined in the config.js file
         $scope.Name="";
 
@@ -116,6 +120,34 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
     $scope.SendingStatus=0;
     $scope.Sending=false;
 });
+
+//Handles the gcode file upload and processing
+document.getElementById('fileUpload').addEventListener('change', getFile)
+
+//gets the file and reads it
+function getFile(event){
+    const input = event.target
+    if ('files' in input && input.files.length > 0) {
+        readFileContent(input.files[0]).then(content => {
+            getGcodeParameter(content);
+        }).catch(error => console.log(error))
+    }
+}
+
+//uses Filereader to read files and return them as a promise
+function readFileContent(file) {
+    const reader = new FileReader()
+    return new Promise((resolve, reject) => {
+        reader.onload = event => resolve(event.target.result)
+        reader.onerror = error => reject(error)
+        reader.readAsText(file)
+    })
+} 
+
+//converts text to the parameter List
+function getGcodeParameter(text){ 
+    
+}
 
 //Starts a new test by sending the metadata structured as json over ble
 //The function is only called when a new Test is started
@@ -184,7 +216,7 @@ function BleSendTestData(respons){
                 }
             }else{
                 SendingErrors++;
-               // send("FALSE");
+                // send("FALSE");
                 if(SendingErrors>MaxSendingErrors){
                     alert("Could not start Test! Try reloading page and restarting Maschine")
                     AddingTest=false;

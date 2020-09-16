@@ -37,7 +37,7 @@
                         <input type="number" ng-model="MoveDistance" class="Distance"/>
                         <button ng-disabled="!MoveEnable" ng-click="MoveDown()" class="button round" id="Down">
                             <i class="fas fa-arrow-down"></i>
-                        </button>s
+                        </button>
                     </div>
                 </div>
             </div>
@@ -49,6 +49,10 @@
                     <button class="button smallround" id="Reset" ng-click="SetDefault()">
                         <i class="fas fa-redo"></i>
                     </button>
+                    <button class="button smallround" id="Upload" ng-click="TriggerUpload()">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                    <input type="file" style="visibility: hidden" id="fileUpload">
                     <h1>New Test</h1>
                     <input placeholder="Name" type="text" class="TestForm Titel" ng-model="Name" />
                     <div class="TestForm Parameter">

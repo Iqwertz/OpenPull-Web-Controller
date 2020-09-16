@@ -358,6 +358,13 @@ h1 {
   top: 20px;
   padding: 0; }
 
+.AddTest #Upload {
+  position: absolute;
+  left: 20px;
+  top: 80px;
+  padding: 0;
+  font-size: 1.6em; }
+
 .AddTest .TestForm {
   font-family: "Source Sans Pro", Arial, Helvetica, sans-serif; }
   .AddTest .TestForm.Titel {

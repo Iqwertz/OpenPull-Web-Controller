@@ -18,4 +18,4 @@ app.controller('Controls', function($scope) {
     $scope.Stop = function(){ //When Stop is Called send "S " to stop the current move of the maschine
         send("S ");
     }
-});
+}); 
