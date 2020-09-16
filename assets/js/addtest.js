@@ -146,7 +146,19 @@ function readFileContent(file) {
 
 //converts text to the parameter List
 function getGcodeParameter(text){ 
-    
+    Config.StandardTestParameter.InfillType.GcodeName
+    console.log(readParameter("support_material_speed", text));
+}
+
+//reads a Parameter from gcode file
+function readParameter(name, code){
+    let value="";
+    name = "; " + name + " = ";
+    let nameLength=name.length;
+    let occurence = code.indexOf(name);
+    let endOccurence = code.indexOf(";", occurence+1);
+    value = code.substring(occurence+nameLength, endOccurence);
+    return value;
 }
 
 //Starts a new test by sending the metadata structured as json over ble
