@@ -90,6 +90,10 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
         SendingErrors = 0;
     }
 
+    $scope.TriggerUpload = function(){  //triggers upload gcode file field
+        document.getElementById("fileUpload").click();
+    }
+
     $scope.SetDefault = function(){   //Resets the Data to the Defaut defined in the config.js file
         $scope.Name="";
 
@@ -115,7 +119,77 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
     $scope.SendingStatus=0;
     $scope.Sending=false;
+
+
+    //converts text to the parameter List
+    $scope.setGcodeParameter = function(text, name){ 
+        
+        $scope.Name=name;
+       let parValue = readParameter(Config.StandardTestParameter.InfillType.GcodeName, text); 
+        if(!$scope.InfillTypeOptions.includes(parValue)){
+                     $scope.InfillTypeOptions.push(parValue);   
+        }
+        $scope.InfillType = parValue;
+        
+        parValue = readParameter(Config.StandardTestParameter.MaterialType.GcodeName, text);
+        if(!$scope.MaterialTypeOptions.includes(parValue)){
+        $scope.MaterialTypeOptions.push(parValue);
+        }
+        $scope.MaterialType = parValue;
+        for(let i=0; i<$scope.parameter.length; i++){
+            console.log(i);
+            $scope.parameter[i].Value=readParameter($scope.parameter[i].GcodeName, text);
+        }
+    }
 });
+
+//Handles the gcode file upload and processing
+document.getElementById('fileUpload').addEventListener('change', getFile)
+
+//gets the file and reads it
+function getFile(event){
+    const input = event.target
+    if ('files' in input && input.files.length > 0) 
+{
+    const name = input.files[0].name;
+        readFileContent(input.files[0]).then(content => {
+            scopeSetGcodeParameter(content, name);
+        }).catch(error => console.log(error))
+    }
+    event.srcElement.value = "";
+}
+
+//uses Filereader to read files and return them as a promise
+function readFileContent(file) {
+    const reader = new FileReader()
+    return new Promise((resolve, reject) => {
+        reader.onload = event => resolve(event.target.result)
+        reader.onerror = error => reject(error)
+        reader.readAsText(file)
+    })
+} 
+
+//reads a Parameter from gcode file
+function readParameter(name, code){
+    let value="";
+    name = "; " + name + " = ";
+    let nameLength=name.length;
+    let occurence = code.indexOf(name);
+    let endOccurence = code.indexOf(";", occurence+1);
+    value = code.substring(occurence+nameLength, endOccurence);
+    value = value.replace("%", "");
+    if(!isNaN(value)){
+         value = parseFloat(value);   
+    }
+    return value;
+}
+
+function scopeSetGcodeParameter(text, name){
+    var scope = angular.element(document.getElementById("NewTest")).scope();
+    scope.$apply(function(){
+        scope.setGcodeParameter(text, name);
+    })
+}
 
 //Starts a new test by sending the metadata structured as json over ble
 //The function is only called when a new Test is started
@@ -184,7 +258,7 @@ function BleSendTestData(respons){
                 }
             }else{
                 SendingErrors++;
-               // send("FALSE");
+                // send("FALSE");
                 if(SendingErrors>MaxSendingErrors){
                     alert("Could not start Test! Try reloading page and restarting Maschine")
                     AddingTest=false;
