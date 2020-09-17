@@ -119,6 +119,26 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
     $scope.SendingStatus=0;
     $scope.Sending=false;
+
+
+    //converts text to the parameter List
+    $scope.setGcodeParameter = function(text){ 
+       let parValue = readParameter(Config.StandardTestParameter.InfillType.GcodeName, text); 
+        if(!$scope.InfillTypeOptions.includes(parValue)){
+                     $scope.InfillTypeOptions.push(parValue);   
+        }
+        $scope.InfillType = parValue;
+        
+        parValue = readParameter(Config.StandardTestParameter.MaterialType.GcodeName, text);
+        if(!$scope.MaterialTypeOptions.includes(parValue)){
+        $scope.MaterialTypeOptions.push(parValue);
+        }
+        $scope.MaterialType = parValue;
+        for(let i=0; i<$scope.parameter.length; i++){
+            console.log(i);
+            $scope.parameter[i].Value=readParameter($scope.parameter[i].GcodeName, text);
+        }
+    }
 });
 
 //Handles the gcode file upload and processing
@@ -127,11 +147,14 @@ document.getElementById('fileUpload').addEventListener('change', getFile)
 //gets the file and reads it
 function getFile(event){
     const input = event.target
-    if ('files' in input && input.files.length > 0) {
+    console.log(input.files[0]);
+    if ('files' in input && input.files.length > 0) 
+{
         readFileContent(input.files[0]).then(content => {
-            getGcodeParameter(content);
+            scopeSetGcodeParameter(content);
         }).catch(error => console.log(error))
     }
+    event.srcElement.value = "";
 }
 
 //uses Filereader to read files and return them as a promise
@@ -144,12 +167,6 @@ function readFileContent(file) {
     })
 } 
 
-//converts text to the parameter List
-function getGcodeParameter(text){ 
-    Config.StandardTestParameter.InfillType.GcodeName
-    console.log(readParameter("support_material_speed", text));
-}
-
 //reads a Parameter from gcode file
 function readParameter(name, code){
     let value="";
@@ -158,7 +175,19 @@ function readParameter(name, code){
     let occurence = code.indexOf(name);
     let endOccurence = code.indexOf(";", occurence+1);
     value = code.substring(occurence+nameLength, endOccurence);
+    value = value.replace("%", "");
+    if(!isNaN(value)){
+         value = parseFloat(value);   
+    }
+    console.log(value, isNaN(value));
     return value;
+}
+
+function scopeSetGcodeParameter(text){
+    var scope = angular.element(document.getElementById("NewTest")).scope();
+    scope.$apply(function(){
+        scope.setGcodeParameter(text);
+    })
 }
 
 //Starts a new test by sending the metadata structured as json over ble

@@ -1,9 +1,9 @@
 ///Configuration of the default test Data
-var Config = {
+const Config = {
     StandardTestParameter: {
         InfillType:{
-            Options: ["Rectilinear", "Grid", "Triangles", "Stars", "Cubic", "Line", "Concentric", "Honeycomb", "3d Honeycomb", "Gyroid", "Hilbert Curve", "Archimedean Chords", "Octagram Spiral"],
-            Default: "Gyroid",
+            Options: ["rectilinear", "grid", "triangles", "stars", "cubic", "line", "concentric", "honeycomb", "3d honeycomb", "gyroid", "hilbert curve", "archimedean chords", "octagram spiral"],
+            Default: "gyroid",
             GcodeName:"fill_pattern"
         },
 
