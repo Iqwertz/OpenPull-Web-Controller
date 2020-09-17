@@ -122,7 +122,9 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
 
     //converts text to the parameter List
-    $scope.setGcodeParameter = function(text){ 
+    $scope.setGcodeParameter = function(text, name){ 
+        
+        $scope.Name=name;
        let parValue = readParameter(Config.StandardTestParameter.InfillType.GcodeName, text); 
         if(!$scope.InfillTypeOptions.includes(parValue)){
                      $scope.InfillTypeOptions.push(parValue);   
@@ -147,11 +149,11 @@ document.getElementById('fileUpload').addEventListener('change', getFile)
 //gets the file and reads it
 function getFile(event){
     const input = event.target
-    console.log(input.files[0]);
     if ('files' in input && input.files.length > 0) 
 {
+    const name = input.files[0].name;
         readFileContent(input.files[0]).then(content => {
-            scopeSetGcodeParameter(content);
+            scopeSetGcodeParameter(content, name);
         }).catch(error => console.log(error))
     }
     event.srcElement.value = "";
@@ -179,14 +181,13 @@ function readParameter(name, code){
     if(!isNaN(value)){
          value = parseFloat(value);   
     }
-    console.log(value, isNaN(value));
     return value;
 }
 
-function scopeSetGcodeParameter(text){
+function scopeSetGcodeParameter(text, name){
     var scope = angular.element(document.getElementById("NewTest")).scope();
     scope.$apply(function(){
-        scope.setGcodeParameter(text);
+        scope.setGcodeParameter(text, name);
     })
 }
 
