@@ -3,6 +3,7 @@
 
 //////////GLobal Vars///////////
 var LastTestData;  //object storing the test data to be able to download it later
+var Testing = false;  //Determin if the maschine is testing
 
 var AddingTest = false;   //Determin if a test is currently added
 var BleAddTestSendArray = [];   //Array contaiing the Data to be send over ble. Every String is a new Line in the File Created on the maschines Sd card
@@ -214,13 +215,14 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
     BleAddTestSendArray.push('"Notes": "' + Notes + '"');
     BleAddTestSendArray.push('},');
     // BleAddTestSendArray.push('}');
-    console.log(BleAddTestSendArray.join("")+'"Data":[]}');
     
-   LastTestData = JSON.parse(BleAddTestSendArray.join("")+'"Data":[]}');
+    const dataStructure = '"Data":[]}'
+   LastTestData = JSON.parse(BleAddTestSendArray.join("")+'"Data":[], "BreakPoint":0, "Maximum":0}');
    console.log(LastTestData);
     
     BleSendTestMode = TestMode;  //Set Send Test Mode
     AddingTest=true;            //Start Sending (This variable is used in the Ble receive data function to let it know that the received data should be processed diffrent)
+    Testing = true;
     ScrollTop();         //Scroll to Top to see progress data
     BleSendTestData();  //Start a new Test by calliing BleSendTestData with no parameter
 }
