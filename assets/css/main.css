@@ -344,6 +344,39 @@ h1 {
   text-align: center;
   font-size: 2.2em; }
 
+.popupContainer {
+  position: absolute;
+  width: 30%;
+  top: 30%;
+  padding: 20px;
+  border-radius: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e6e6e6;
+  box-shadow: 5px 5px 5px #000;
+  display: flex;
+  align-items: center;
+  flex-flow: column; }
+  .popupContainer h1 {
+    color: #000; }
+  .popupContainer .results-container {
+    font-size: 1.2em;
+    margin: 20px;
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+    text-align: left; }
+    .popupContainer .results-container .result {
+      display: flex;
+      flex-flow: row;
+      margin: 3px; }
+      .popupContainer .results-container .result .name {
+        width: 150px; }
+  .popupContainer .close {
+    position: absolute;
+    right: 20px;
+    background-color: #ff7d7d; }
+
 .AddTest #Exit {
   background-color: #ff7c7c;
   position: absolute;
