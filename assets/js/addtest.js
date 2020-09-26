@@ -197,6 +197,7 @@ function scopeSetGcodeParameter(text, name){
 //Starts a new test by sending the metadata structured as json over ble
 //The function is only called when a new Test is started
 function BleStartNewTest(Name, Parameter, TestMode, Notes){ 
+    LastTestData = {};
     BleAddTestSendArray=[];
     BleAddTestSendArray.push("{");
     BleAddTestSendArray.push('"MetaData": {');
