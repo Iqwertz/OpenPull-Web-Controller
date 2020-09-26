@@ -108,20 +108,34 @@ function handleNotifications(event) {
                 if(!AddingTest){  //When there is currently no test added then the data is a new command
                     if(data.charAt(0)=="V"){  //New Value
                         addData(Number(data.substr(1)));  //Get Value and set it to the chart
+                        if(Testing){
+                            LastTestData.Data.push(Number(data.substr(1)));
+                        }
                     }else if (data.charAt(0)=="C"){   //Log data
                         console.log(data.substr(1));   //Get the Value and log it
-                    }else if (data.charAt(0)=="A"){  // If hte command starts with "A" it is an alert
+                    }else if (data.charAt(0)=="A"){  // If ble command starts with "A" it is an alert
                         console.log(data.substr(1));
                         alert(data.substr(1));
                     }else if (data=="SDfalse"){  // Alert that no sd is in the maschine
                         alert("Attention! No Sd Card!");
-                    }else if (data.substr(0,7)=="FinTest"){  // Alert that no sd is in the maschine
-                        console.log("Test Finished, Maximum: " + data.substr(data.indexOf("B")+1,data.indexOf(";")) + " / Breakpoint: " + data.substr(data.indexOf("M")+1));
-                        alert("Test Finished, Maximum: " + data.substr(data.indexOf("M")+1) + " / Breakpoint: " + data.substring(data.indexOf("B")+1,data.indexOf(";")));
+                    }else if (data.substr(0,7)=="FinTest"){  // Alert that test got finished
+                        Testing=false;
+                        const testMax = data.substr(data.indexOf("M")+1);
+                        const testBreak = data.substring(data.indexOf("B")+1,data.indexOf(";"));
+                        console.log("Test Finished, Maximum: " + testMax + " / Breakpoint: " + testBreak);
+                       // alert("Test Finished, Maximum: " + testMax + " / Breakpoint: " + testBreak);
                         var scope = angular.element(document.getElementById("ControlsId")).scope();
                         scope.$apply(function(){
                             scope.MoveEnable = true;
                         })
+                        
+                        LastTestData.Maximum = testMax;
+                        LastTestData.BreakPoint = testBreak;
+                        console.log(LastTestData);
+                        
+                        SetPopupData("showPopup", true);
+                        SetPopupData("maximum", testMax);
+                        SetPopupData("breakpoint", testBreak);
                     }
                 }else{
                     BleSendTestData(data); //When there is currently data added send the data to the "BleSendTestData()" function
