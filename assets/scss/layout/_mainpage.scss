@@ -17,11 +17,11 @@ h1{
     display: flex; 
     align-items:center;
     flex-flow: column;
-    
+
     h1{
         color: #000;
     }
-    
+
     .results-container{
         font-size: 1.2em;
         margin: 20px;
@@ -29,21 +29,33 @@ h1{
         flex-flow: column;
         align-content: center;
         text-align: left;
-        
+
         .result{
             display: flex;
             flex-flow: row;
             margin: 3px; 
-            
+
             .name{
                 width: 150px;
             }
         }
     }
-    
+
     .close{
-       position: absolute;
+        position: absolute;
         right: 20px;
         background-color: #ff7d7d;
     }
+
+    .open-visualizer-button{
+        margin: 20px;
+        button{
+            background-color: #8883ff;
+        }
+        
+        button:hover{
+            background-color: #a3a3ff;
+        }
+    }
+
 }

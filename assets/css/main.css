@@ -376,6 +376,12 @@ h1 {
     position: absolute;
     right: 20px;
     background-color: #ff7d7d; }
+  .popupContainer .open-visualizer-button {
+    margin: 20px; }
+    .popupContainer .open-visualizer-button button {
+      background-color: #8883ff; }
+    .popupContainer .open-visualizer-button button:hover {
+      background-color: #a3a3ff; }
 
 .AddTest #Exit {
   background-color: #ff7c7c;
