@@ -49,7 +49,7 @@ bool microSteppingMove[3] = {false, false, false};
 //Auto Home
 byte endStopPin = 13;
 int maxHomingDist = 230; //in mm
-int HookOffset = 10;
+float HookOffset = 10;
 
 long MoveStepsMM = 1400;
 ////// PIN definitions
@@ -171,6 +171,8 @@ void loop() {
       Move(rest.toInt());
     } else if(taskPart == "G28"){
       Home(rest.toInt()); 
+    }else if(taskPart =="M206"){
+      SetOffset();
   }else if (taskPart == "M10") { //Start SLOW test
       digitalWrite(enablePin, LOW);
       mode = 1;
@@ -343,7 +345,8 @@ float CalcLoadValue() {
   }
   return lV;
 }
-void Move(int distance) {  //This function moves the Maschine the given amount of mm
+long Move(int distance) {  //This function moves the Maschine the given amount of mm
+  long movedSteps=0;
   SetMicroStepping(microSteppingMove);
   digitalWrite(enablePin, LOW);
   Serial.println(distance);
@@ -371,6 +374,7 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(floor(StepDelay));
     digitalWrite(stepPin, LOW);
+    movedSteps=i;
     if (Serial1.available()) {
       if (Serial1.readString() == "S ") {
         i = Steps;
@@ -392,6 +396,8 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
   delay(100);
   digitalWrite(enablePin, HIGH);
   SetMicroStepping(microSteppingDefault);
+
+  return movedSteps;
 }
 
 void Home(int Offset){
@@ -408,6 +414,14 @@ void Home(int Offset){
   }
 }
 
+void SetOffset(){
+  if(digitalRead(endStopPin)){
+    HookOffset = (float)Move(maxHomingDist*-1)/(float)MoveStepsMM;
+    Move(HookOffset);
+  }else{
+     Serial1.println("ANo Endstop Connected");
+  }
+}
 void printSpaces(int numberOfSpaces) { //This function will print a given amount of empty lines
   for (int i = numberOfSpaces; i > 0; i--) {
     Log("");
