@@ -37,8 +37,13 @@ int fastSpeedDelay = 300;     ////Time delay between steps for jogging fast
 boolean dir = 0;
 /////Stepper Linear Accel Settings
 int StartSpeed = 800; //Delay (ms) per Step at the Start of a Move
-int EndSpeed = 1;  //Delay (ms) per Step when at full Speed
+int EndSpeed = 5;  //Delay (ms) per Step when at full Speed
 float AccelSteps = .5; //Slope of the Linear Acceleration
+
+//////Dynamic Microstepping Settings
+int microSteppingPins[3] = {9, 10, 11};
+bool microSteppingDefault[3] = {true, true, true};
+bool microSteppingMove[3] = {false, false, false};
 
 long MoveStepsMM = 39000;
 ////// PIN definitions
@@ -103,6 +108,12 @@ void setup() {
   digitalWrite(directionPin, dir);
   digitalWrite(stepPin, LOW);
   digitalWrite(enablePin, HIGH);
+  // MicroStepping
+  pinMode(microSteppingPins[0], OUTPUT);
+  pinMode(microSteppingPins[1], OUTPUT);
+  pinMode(microSteppingPins[2], OUTPUT);
+  SetMicroStepping(microSteppingDefault);
+  
   //Up Button
   pinMode(upPin, INPUT);
   digitalWrite(upPin, HIGH);
@@ -305,6 +316,13 @@ void loop() {
     }
   }
 }
+
+void SetMicroStepping(bool steppingPins[3]) {
+  digitalWrite(microSteppingPins[0], steppingPins[0]);
+  digitalWrite(microSteppingPins[1], steppingPins[1]);
+  digitalWrite(microSteppingPins[2], steppingPins[2]);
+}
+
 float CalcLoadValue() {
   float lV = (loadCell.averageValue(1) - tareValue) / gainValue;
   if (InvertMeasurments) {
@@ -313,6 +331,7 @@ float CalcLoadValue() {
   return lV;
 }
 void Move(int distance) {  //This function moves the Maschine the given amount of mm
+  SetMicroStepping(microSteppingMove);
   digitalWrite(enablePin, LOW);
   Serial.println(distance);
   if (distance < 0) {
@@ -323,8 +342,8 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
   long Steps = MoveStepsMM * abs(distance);
   long LastMillis = millis();
   float StepDelay = StartSpeed;
-  int DecellerationSteps=(StartSpeed - EndSpeed) / AccelSteps;
-  for (long i = 0; i <= Steps; i++) {
+  int DecellerationSteps = (StartSpeed - EndSpeed) / AccelSteps;
+  for (long i = 0; i <= Steps; i++) {  //Acceleration was implemented because the motors wouldnt spin when started to fast. 
     if (Steps - i < DecellerationSteps) {
       if (StepDelay < StartSpeed) {
         StepDelay += AccelSteps;
@@ -356,6 +375,7 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
   }
   delay(100);
   digitalWrite(enablePin, HIGH);
+  SetMicroStepping(microSteppingDefault);
 }
 void printSpaces(int numberOfSpaces) { //This function will print a given amount of empty lines
   for (int i = numberOfSpaces; i > 0; i--) {
