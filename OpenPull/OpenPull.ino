@@ -29,23 +29,28 @@ bool WriteWhenTighten = true;  //When enabled the Data will be written to the Sd
 int TestStopDifferenz = 200;
 int MaxNeg = -200; //Values below that durring tests get filterd out
 ////// Stepper Variables
-int pulseLength = 10;
+byte pulseLength = 10;
 long stepsPerMM = 39000;// 200 * 2 * (13 + 212.0 / 289.0) / 2; // Steps per rev * Microstepping * Gear reduction ratio / Pitch
 float stepsPerSecond = stepsPerMM / 60; //1mm/min
 int slowSpeedDelay = 3000;    //Time delay between steps for jogging slowly
 int fastSpeedDelay = 300;     ////Time delay between steps for jogging fast
 boolean dir = 0;
 /////Stepper Linear Accel Settings
-int StartSpeed = 800; //Delay (ms) per Step at the Start of a Move
-int EndSpeed = 5;  //Delay (ms) per Step when at full Speed
+int StartSpeed = 1000; //Delay (ms) per Step at the Start of a Move
+int EndSpeed = 80;  //Delay (ms) per Step when at full Speed
 float AccelSteps = .5; //Slope of the Linear Acceleration
 
 //////Dynamic Microstepping Settings
-int microSteppingPins[3] = {9, 10, 11};
+bool dynamicMicrostepping = true;
+byte microSteppingPins[3] = {9, 10, 11};
 bool microSteppingDefault[3] = {true, true, true};
 bool microSteppingMove[3] = {false, false, false};
 
-long MoveStepsMM = 39000;
+//Auto Home
+byte endStopPin = 13;
+int maxHomingDist = 230; //in mm
+
+long MoveStepsMM = 1400;
 ////// PIN definitions
 int directionPin = 2;
 int stepPin = 3;
@@ -89,13 +94,13 @@ void setup() {
   // Sd ini
   pinMode(sdDetectPin, INPUT_PULLUP);
   if (digitalRead(sdDetectPin) == 0) {
-    Serial.print("Initializing SD card...");
+    //Serial.print("Initializing SD card...");
     if (!SD.begin()) {
-      Serial.println("initialization failed!");
+      //Serial.println("initialization failed!");
     } else {
       SdInserted = true;
     }
-    Serial.println("initialization done.");
+    //Serial.println("initialization done.");
     delay(500);
     SdIni();
   }
@@ -112,8 +117,11 @@ void setup() {
   pinMode(microSteppingPins[0], OUTPUT);
   pinMode(microSteppingPins[1], OUTPUT);
   pinMode(microSteppingPins[2], OUTPUT);
-  SetMicroStepping(microSteppingDefault);
-  
+    digitalWrite(microSteppingPins[0], microSteppingDefault[0]);
+  digitalWrite(microSteppingPins[1], microSteppingDefault[1]);
+  digitalWrite(microSteppingPins[2], microSteppingDefault[2]);
+
+  pinMode(endStopPin, INPUT);
   //Up Button
   pinMode(upPin, INPUT);
   digitalWrite(upPin, HIGH);
@@ -160,7 +168,9 @@ void loop() {
       AbortTest();
     } else if (taskPart == "G0") {
       Move(rest.toInt());
-    } else if (taskPart == "M10") { //Start SLOW test
+    } else if(taskPart == "G28"){
+      Home(); 
+  }else if (taskPart == "M10") { //Start SLOW test
       digitalWrite(enablePin, LOW);
       mode = 1;
       if (rest == "S1") {
@@ -264,7 +274,7 @@ void loop() {
   if ((micros() - lastLoadValues) >= measuringIntervall * 1000000) {
     digitalWrite(led1Pin, HIGH);
     float loadValue = CalcLoadValue();
-    Serial.println(loadValue);
+    //Serial.println(loadValue);
     Serial1.println(String("V") + loadValue);
     if (WriteToSD) {
       if (WriteWhenTighten) {
@@ -318,9 +328,11 @@ void loop() {
 }
 
 void SetMicroStepping(bool steppingPins[3]) {
+  if(dynamicMicrostepping){
   digitalWrite(microSteppingPins[0], steppingPins[0]);
   digitalWrite(microSteppingPins[1], steppingPins[1]);
   digitalWrite(microSteppingPins[2], steppingPins[2]);
+  }
 }
 
 float CalcLoadValue() {
@@ -363,6 +375,9 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
         i = Steps;
       }
     }
+    if(!digitalRead(endStopPin) && distance<0){
+      i=Steps;
+    }
     /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
     /*
       if (millis() - LastMillis >= 500) {
@@ -377,6 +392,17 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
   digitalWrite(enablePin, HIGH);
   SetMicroStepping(microSteppingDefault);
 }
+
+void Home(){
+  if(digitalRead(endStopPin)){
+    Move(1);
+    Move(maxHomingDist*-1);
+    Move(1);
+  }else{
+     Serial1.println("ANo Endstop Connected");
+  }
+}
+
 void printSpaces(int numberOfSpaces) { //This function will print a given amount of empty lines
   for (int i = numberOfSpaces; i > 0; i--) {
     Log("");
@@ -524,7 +550,7 @@ void BleNewTest() {
   } else {
     Serial1.println("OK NEW NOSD");
   }
-  Serial.println("New Test");
+  //Serial.println("New Test");
   bool FinishedIni = false;
   String LastString = "";
   String NextInput = "";
@@ -551,17 +577,17 @@ void BleNewTest() {
         } else {
           LastString = s;
           Serial1.println(LastString);
-          Serial.println(LastString);
+          //Serial.println(LastString);
         }
       } else if (s.substring(0, 2) == "OK") {
         if (SdInserted) {
           NewTest.println(LastString);
         }
-        Serial.println(LastString);
+        //Serial.println(LastString);
         LastString = "";
         NextInput = s.substring(2);
       } else {
-        Serial.println("Deleted Line");
+        //Serial.println("Deleted Line");
         LastString = "";
       }
     }
@@ -591,9 +617,9 @@ void CheckSd() {
       }
     }
   }
-  Serial.print(digitalRead(sdDetectPin));
-  Serial.print(",");
-  Serial.println(SdInserted);
+  //Serial.print(digitalRead(sdDetectPin));
+  //Serial.print(",");
+  //Serial.println(SdInserted);
 }
 //////Function that Initializes Sd Card and Creates Directory if missing
 void SdIni() {
