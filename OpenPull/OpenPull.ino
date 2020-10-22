@@ -49,6 +49,7 @@ bool microSteppingMove[3] = {false, false, false};
 //Auto Home
 byte endStopPin = 13;
 int maxHomingDist = 230; //in mm
+int HookOffset = 10;
 
 long MoveStepsMM = 1400;
 ////// PIN definitions
@@ -169,7 +170,7 @@ void loop() {
     } else if (taskPart == "G0") {
       Move(rest.toInt());
     } else if(taskPart == "G28"){
-      Home(); 
+      Home(rest.toInt()); 
   }else if (taskPart == "M10") { //Start SLOW test
       digitalWrite(enablePin, LOW);
       mode = 1;
@@ -393,11 +394,15 @@ void Move(int distance) {  //This function moves the Maschine the given amount o
   SetMicroStepping(microSteppingDefault);
 }
 
-void Home(){
+void Home(int Offset){
   if(digitalRead(endStopPin)){
     Move(1);
     Move(maxHomingDist*-1);
-    Move(1);
+    if(Offset>=0){
+      Move(Offset);
+    }else{
+      Move(HookOffset);
+    }
   }else{
      Serial1.println("ANo Endstop Connected");
   }
