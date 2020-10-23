@@ -10,6 +10,7 @@
   ##### Sd
   ##### SPI
   ########################################*/
+  //Current COde SIze: 28234 Programm
 /* Libraries */
 #include "hx711.h"
 //#include <AccelStepper.h>
