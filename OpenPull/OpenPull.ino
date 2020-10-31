@@ -374,6 +374,15 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
     }
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(floor(StepDelay));
+    /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
+    /*
+      if (millis() - LastMillis >= 500) {
+      float CValue = CalcLoadValue();
+      if (CValue >= 20) {
+        i = Steps;
+      }
+      LastMillis = millis();
+      } */
     digitalWrite(stepPin, LOW);
     movedSteps=i;
     if (Serial1.available()) {
@@ -384,15 +393,6 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
     if(!digitalRead(endStopPin) && distance<0){
       i=Steps;
     }
-    /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
-    /*
-      if (millis() - LastMillis >= 500) {
-      float CValue = CalcLoadValue();
-      if (CValue >= 20) {
-        i = Steps;
-      }
-      LastMillis = millis();
-      } */
   }
   delay(100);
   digitalWrite(enablePin, HIGH);
