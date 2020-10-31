@@ -331,6 +331,10 @@ textarea {
     display: block;
     padding: 30px 20px;
     overflow-y: auto; }
+    .ControlsContainer #SetOffset {
+      position: fixed;
+      bottom: 5px;
+      right: 10px; }
     .ControlsContainer .Move {
       padding-top: 0;
       margin: 40px 0; }
