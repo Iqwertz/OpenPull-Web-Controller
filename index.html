@@ -8,7 +8,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
         <script src="https://kit.fontawesome.com/096ef5e38d.js" crossorigin="anonymous"></script>
-        
+
     </head>
     <body ng-app="app">
         <button class="button round" onclick="onStartButtonClick();" id="Ble">
@@ -20,37 +20,37 @@
         </div>
 
         <div class="popupController" id="popup" ng-controller="Popup">
-        <div class="popupContainer" ng-show="showPopup">
-            <button class="close button smallround" ng-click="showPopup=false">
-                <i class="fas fa-times"></i>
-            </button>
-            <h1>Test finished</h1>
-            <div class="results-container">
-                <div class="result maximum">
-                    <div class="name">
-                        Maximum:
+            <div class="popupContainer" ng-show="showPopup">
+                <button class="close button smallround" ng-click="showPopup=false">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h1>Test finished</h1>
+                <div class="results-container">
+                    <div class="result maximum">
+                        <div class="name">
+                            Maximum:
+                        </div>
+                        <div class="value">
+                            {{maximum}}N
+                        </div>
                     </div>
-                    <div class="value">
-                        {{maximum}}N
+                    <div class="result breakpoint">
+                        <div class="name">
+                            Breakpoint:
+                        </div>
+                        <div class="value">
+                            {{breakpoint}}N
+                        </div>
                     </div>
                 </div>
-                <div class="result breakpoint">
-                    <div class="name">
-                        Breakpoint:
-                    </div>
-                    <div class="value">
-                        {{breakpoint}}N
-                    </div>
+                <div class="open-visualizer-button">
+                    <button class="button fit add" ng-click="openDataInVisualizer()">Open Data in Visualizer</button>
                 </div>
-            </div>
-            <div class="open-visualizer-button">
-                <button class="button fit add" ng-click="openDataInVisualizer()">Open Data in Visualizer</button>
-            </div>
-            <div class="download-button">
-                <button class="button fit add" ng-click="download()">Download Results</button>
+                <div class="download-button">
+                    <button class="button fit add" ng-click="download()">Download Results</button>
+                </div>
             </div>
         </div>
-            </div>
 
         <div id="ControlsId" class="ControlsContainer" ng-controller="Controls as MainController">
             <div id="ControllInterface" ng-show="ControllerInterface" >
@@ -60,8 +60,16 @@
 
                 <div class="subcontrols">
                     <div class="PauseStop">
+                        <button class="button round" ng-click="Home()" id="Home">
+                            <i class="fas fa-home"></i>
+                        </button>
+
                         <button class="button round" ng-click="Stop()" id="Stop">
                             <i class="far fa-times-circle"></i>
+                        </button>
+
+                        <button class="button round" ng-click="HomeOffset()" id="HomeOffset">
+                            <i class="fas fa-bullseye"></i>
                         </button>
                     </div>
                     <div class="Move">
@@ -74,6 +82,9 @@
                         </button>
                     </div>
                 </div>
+                <button class="button round" ng-click="SetOffset()" id="SetOffset">
+                    <i class="fas fa-ruler-vertical"></i>
+                </button>
             </div>
             <div id="AddTest" class="AddTest" ng-hide="ControllerInterface" >
                 <button class="button smallround" id="Exit" ng-click="ControllerInterface=true">

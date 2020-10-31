@@ -285,15 +285,23 @@ textarea {
     display: flex; }
   .ControlsContainer .PauseStop {
     position: absolute;
-    left: 70px;
-    margin-top: 80px;
-    padding: 20px; }
+    left: 80px;
+    margin-top: 65px;
+    padding: 20px 0; }
     .ControlsContainer .PauseStop button {
       display: block;
-      left: 0; }
+      left: 0;
+      margin: 20px 0; }
     .ControlsContainer .PauseStop #Stop {
-      background-color: #ff4242;
-      top: 6rem; }
+      background-color: #ff4242; }
+    .ControlsContainer .PauseStop #HomeOffset {
+      background-color: #00f5ff; }
+    .ControlsContainer .PauseStop #Home {
+      background-color: #ff65dc; }
+  .ControlsContainer #SetOffset {
+    position: absolute;
+    bottom: 15px;
+    right: 15px; }
   .ControlsContainer .Move {
     position: absolute;
     right: 70px;
