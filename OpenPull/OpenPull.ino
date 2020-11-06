@@ -18,7 +18,7 @@
 #include <SD.h>
 #include <EEPROM.h>
 
-////// Load Cell Variables
+////// Load Cell Variables d
 float gainValue = -875.7 * (1 - 0.001); //CALIBRATION FACTOR
 float measuringIntervall = .5;       //Measuring interval when IDLE
 float measuringIntervallTest = .5;  //Measuring interval during SLOW test
