@@ -10,12 +10,14 @@
   ##### Sd
   ##### SPI
   ########################################*/
-  //Current COde SIze: 28234 Programm
+//Current COde SIze: 28234 Programm
 /* Libraries */
 #include "hx711.h"
 //#include <AccelStepper.h>
 #include <SPI.h>
 #include <SD.h>
+#include <EEPROM.h>
+
 ////// Load Cell Variables
 float gainValue = -875.7 * (1 - 0.001); //CALIBRATION FACTOR
 float measuringIntervall = .5;       //Measuring interval when IDLE
@@ -119,7 +121,7 @@ void setup() {
   pinMode(microSteppingPins[0], OUTPUT);
   pinMode(microSteppingPins[1], OUTPUT);
   pinMode(microSteppingPins[2], OUTPUT);
-    digitalWrite(microSteppingPins[0], microSteppingDefault[0]);
+  digitalWrite(microSteppingPins[0], microSteppingDefault[0]);
   digitalWrite(microSteppingPins[1], microSteppingDefault[1]);
   digitalWrite(microSteppingPins[2], microSteppingDefault[2]);
 
@@ -136,6 +138,10 @@ void setup() {
   //LED Pin
   pinMode(led1Pin, OUTPUT);
   digitalWrite(led1Pin, LOW);
+
+  //read saved Offset
+  HookOffset=EEPROM.read(0);
+
 }
 void loop() {
   /////////Sd
@@ -170,11 +176,11 @@ void loop() {
       AbortTest();
     } else if (taskPart == "G0") {
       Move(rest.toInt());
-    } else if(taskPart == "G28"){
-      Home(rest.toInt()); 
-    }else if(taskPart =="M206"){
+    } else if (taskPart == "G28") {
+      Home(rest.toInt());
+    } else if (taskPart == "M206") {
       SetOffset();
-  }else if (taskPart == "M10") { //Start SLOW test
+    } else if (taskPart == "M10") { //Start SLOW test
       digitalWrite(enablePin, LOW);
       mode = 1;
       if (rest == "S1") {
@@ -332,10 +338,10 @@ void loop() {
 }
 
 void SetMicroStepping(bool steppingPins[3]) {
-  if(dynamicMicrostepping){
-  digitalWrite(microSteppingPins[0], steppingPins[0]);
-  digitalWrite(microSteppingPins[1], steppingPins[1]);
-  digitalWrite(microSteppingPins[2], steppingPins[2]);
+  if (dynamicMicrostepping) {
+    digitalWrite(microSteppingPins[0], steppingPins[0]);
+    digitalWrite(microSteppingPins[1], steppingPins[1]);
+    digitalWrite(microSteppingPins[2], steppingPins[2]);
   }
 }
 
@@ -347,10 +353,9 @@ float CalcLoadValue() {
   return lV;
 }
 long Move(int distance) {  //This function moves the Maschine the given amount of mm
-  long movedSteps=0;
+  long movedSteps = 0;
   SetMicroStepping(microSteppingMove);
   digitalWrite(enablePin, LOW);
-  Serial.println(distance);
   if (distance < 0) {
     digitalWrite(directionPin, HIGH);
   } else {
@@ -360,7 +365,7 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
   long LastMillis = millis();
   float StepDelay = StartSpeed;
   int DecellerationSteps = (StartSpeed - EndSpeed) / AccelSteps;
-  for (long i = 0; i <= Steps; i++) {  //Acceleration was implemented because the motors wouldnt spin when started to fast. 
+  for (long i = 0; i <= Steps; i++) {  //Acceleration was implemented because the motors wouldnt spin when started to fast.
     if (Steps - i < DecellerationSteps) {
       if (StepDelay < StartSpeed) {
         StepDelay += AccelSteps;
@@ -384,14 +389,14 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
       LastMillis = millis();
       } */
     digitalWrite(stepPin, LOW);
-    movedSteps=i;
+    movedSteps = i;
     if (Serial1.available()) {
       if (Serial1.readString() == "S ") {
         i = Steps;
       }
     }
-    if(!digitalRead(endStopPin) && distance<0){
-      i=Steps;
+    if (!digitalRead(endStopPin) && distance < 0) {
+      i = Steps;
     }
   }
   delay(100);
@@ -401,26 +406,29 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
   return movedSteps;
 }
 
-void Home(int Offset){
-  if(digitalRead(endStopPin)){
+void Home(int Offset) {
+  if (digitalRead(endStopPin)) {
     Move(1);
-    Move(maxHomingDist*-1);
-    if(Offset>=0){
+    Move(maxHomingDist * -1);
+    if (Offset >= 0) {
       Move(Offset);
-    }else{
+    } else {
       Move(HookOffset);
     }
-  }else{
-     Serial1.println("ANo Endstop Connected");
+  } else {
+    Serial1.println("ANo Endstop Connected");
   }
 }
 
-void SetOffset(){
-  if(digitalRead(endStopPin)){
-    HookOffset = (float)Move(maxHomingDist*-1)/(float)MoveStepsMM;
+void SetOffset() {
+  if (digitalRead(endStopPin)) {
+    HookOffset = (float)Move(maxHomingDist * -1) / (float)MoveStepsMM;
+    if (HookOffset >= 0) {
+      EEPROM.write(0, HookOffset);
+    }
     Move(HookOffset);
-  }else{
-     Serial1.println("ANo Endstop Connected");
+  } else {
+    Serial1.println("ANo Endstop Connected");
   }
 }
 void printSpaces(int numberOfSpaces) { //This function will print a given amount of empty lines
