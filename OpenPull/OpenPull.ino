@@ -140,7 +140,7 @@ void setup() {
   digitalWrite(led1Pin, LOW);
 
   //read saved Offset
-  HookOffset=EEPROM.read(0);
+  HookOffset = EEPROM.read(0);
 
 }
 void loop() {
@@ -378,16 +378,19 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
       }
     }
     digitalWrite(stepPin, HIGH);
-    delayMicroseconds(floor(StepDelay));
     /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
-    /*
-      if (millis() - LastMillis >= 500) {
+    if (millis() - LastMillis >= 500) {
+     /* long cStart=millis();
       float CValue = CalcLoadValue();
       if (CValue >= 20) {
         i = Steps;
       }
       LastMillis = millis();
-      } */
+      delayMicroseconds(floor(StepDelay)-(millis()-cStart)); */
+      delayMicroseconds(floor(StepDelay));
+    } else {
+      delayMicroseconds(floor(StepDelay));
+    }
     digitalWrite(stepPin, LOW);
     movedSteps = i;
     if (Serial1.available()) {
