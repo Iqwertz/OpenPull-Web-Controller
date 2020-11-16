@@ -285,15 +285,23 @@ textarea {
     display: flex; }
   .ControlsContainer .PauseStop {
     position: absolute;
-    left: 70px;
-    margin-top: 80px;
-    padding: 20px; }
+    left: 80px;
+    margin-top: 65px;
+    padding: 20px 0; }
     .ControlsContainer .PauseStop button {
       display: block;
-      left: 0; }
+      left: 0;
+      margin: 20px 0; }
     .ControlsContainer .PauseStop #Stop {
-      background-color: #ff4242;
-      top: 6rem; }
+      background-color: #ff4242; }
+    .ControlsContainer .PauseStop #HomeOffset {
+      background-color: #00f5ff; }
+    .ControlsContainer .PauseStop #Home {
+      background-color: #ff65dc; }
+  .ControlsContainer #SetOffset {
+    position: absolute;
+    bottom: 15px;
+    right: 15px; }
   .ControlsContainer .Move {
     position: absolute;
     right: 70px;
@@ -323,6 +331,10 @@ textarea {
     display: block;
     padding: 30px 20px;
     overflow-y: auto; }
+    .ControlsContainer #SetOffset {
+      position: fixed;
+      bottom: 5px;
+      right: 10px; }
     .ControlsContainer .Move {
       padding-top: 0;
       margin: 40px 0; }
@@ -376,6 +388,12 @@ h1 {
     position: absolute;
     right: 20px;
     background-color: #ff7d7d; }
+  .popupContainer .open-visualizer-button {
+    margin: 20px; }
+    .popupContainer .open-visualizer-button button {
+      background-color: #8883ff; }
+    .popupContainer .open-visualizer-button button:hover {
+      background-color: #a3a3ff; }
 
 .AddTest #Exit {
   background-color: #ff7c7c;

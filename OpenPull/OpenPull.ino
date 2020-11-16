@@ -19,6 +19,7 @@
 #include <EEPROM.h>
 
 ////// Load Cell Variables
+
 float gainValue = -875.7 * (1 - 0.001); //CALIBRATION FACTOR
 float measuringIntervall = .5;       //Measuring interval when IDLE
 float measuringIntervallTest = .5;  //Measuring interval during SLOW test
@@ -378,19 +379,24 @@ long Move(int distance) {  //This function moves the Maschine the given amount o
       }
     }
     digitalWrite(stepPin, HIGH);
+
     /////This can be used to stop move when there is a load on it but then the motors will click every .5 s, due to the time it takes to read the LoadCell
     if (millis() - LastMillis >= 500) {
       long cStart=millis();
+
       float CValue = CalcLoadValue();
       if (CValue >= 20) {
         i = Steps;
+        movedSteps=-1;
       }
       LastMillis = millis();
+
       delayMicroseconds(floor(StepDelay)-(millis()-cStart)); 
       delayMicroseconds(floor(StepDelay));
     } else {
       delayMicroseconds(floor(StepDelay));
     }
+
     digitalWrite(stepPin, LOW);
     movedSteps = i;
     if (Serial1.available()) {

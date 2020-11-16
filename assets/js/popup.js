@@ -5,6 +5,10 @@ app.controller('Popup', function($scope) {   //Start new popup COntroller
     $scope.download = function(){
         downloadObjectAsJson(LastTestData, LastTestData.MetaData.Name);
     }
+    $scope.openDataInVisualizer = function(){
+        localStorage.setItem("openPullTestData", JSON.stringify(LastTestData));  //sets localstorage
+        window.open("https://iqwertz.github.io/Visualizer/?localData=true");  //opens visualizer
+    }
 }); 
 
 function SetPopupData(parameter, data){  //Set the Send Status to the angular controller var

@@ -18,4 +18,16 @@ app.controller('Controls', function($scope) {
     $scope.Stop = function(){ //When Stop is Called send "S " to stop the current move of the maschine
         send("S ");
     }
+    
+    $scope.Home = function(){
+        send("G28 0");
+    }
+    
+    $scope.HomeOffset = function(){
+        send("G28 -1");
+    }
+    
+    $scope.SetOffset = function(){
+        send("M206");
+    }
 }); 
