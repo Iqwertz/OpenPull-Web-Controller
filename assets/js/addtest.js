@@ -75,7 +75,7 @@ app.controller('AddTest', function($scope) {   //Start new addTest Controller
 
             var AssembledParameter = Object.create($scope.parameter);  //Array which will also contain the selectable Parameter
             //Add the selectable obtions to the parameter array
-            AssembledParameter.unshift({Name: "Infill Type", Value: $scope.InfillType , Unit: ""});
+            AssembledParameter.unshift({Name: "InfillType", Value: $scope.InfillType , Unit: ""});
             AssembledParameter.unshift({Name: "Material", Value: $scope.MaterialType, Unit: ""});
             AssembledParameter.unshift({Name: "Orientation", Value: $scope.Orientation, Unit: ""});
             $scope.$parent.MoveEnable=false;
@@ -181,9 +181,11 @@ function readParameter(name, code){
     let endOccurence = code.indexOf(";", occurence+1);
     value = code.substring(occurence+nameLength, endOccurence);
     value = value.replace("%", "");
+        value = value.replace(/(\r\n|\n|\r)/gm, "");
     if(!isNaN(value)){
          value = parseFloat(value);   
     }
+    
     return value;
 }
 
@@ -218,7 +220,13 @@ function BleStartNewTest(Name, Parameter, TestMode, Notes){
     // BleAddTestSendArray.push('}');
     
     const dataStructure = '"Data":[]}'
-   LastTestData = JSON.parse(BleAddTestSendArray.join("")+'"Data":[], "BreakPoint":0, "Maximum":0}');
+    
+    let dataAsText = BleAddTestSendArray.join("")+'"Data":[], "BreakPoint":0, "Maximum":0}';
+    
+    dataAsText = dataAsText.replace(/(\r\n|\n|\r)/gm, "");  //remove return charackters  (Fix gcode upload Bug)
+    console.log(BleAddTestSendArray);
+    
+   LastTestData = JSON.parse(dataAsText);
    console.log(LastTestData);
     
     BleSendTestMode = TestMode;  //Set Send Test Mode

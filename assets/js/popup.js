@@ -1,9 +1,8 @@
 app.controller('Popup', function($scope) {   //Start new popup COntroller
     $scope.maximum = 0;
     $scope.breakpoint = 0;
-    $scope.showPopup = true;
+    $scope.showPopup = false;
     $scope.download = function(){
-        console.log("skjd");
         downloadObjectAsJson(LastTestData, LastTestData.MetaData.Name);
     }
 }); 
